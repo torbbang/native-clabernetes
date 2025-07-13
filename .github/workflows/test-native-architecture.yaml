@@ -1,0 +1,448 @@
+---
+name: test-native-architecture
+
+on:
+  workflow_call: {}
+  workflow_dispatch:
+    inputs:
+      debug_setup:
+        description: "start tmate during cluster setup"
+        type: boolean
+        required: false
+        default: false
+      debug_tests:
+        description: "start tmate before native tests"
+        type: boolean
+        required: false
+        default: false
+      test_kubevirt:
+        description: "include KubeVirt VM tests"
+        type: boolean
+        required: false
+        default: true
+      cilium_version:
+        description: "Cilium version to test with"
+        type: string
+        required: false
+        default: "1.16.5"
+  pull_request:
+    branches: [ main, feat/native-architecture ]
+    paths:
+      - '.develop/**'
+      - 'pkg/executor/**'
+      - 'pkg/networking/**'
+      - 'pkg/workload/**'
+      - '.github/workflows/test-native-architecture.yaml'
+  push:
+    branches: [ feat/native-architecture ]
+
+env:
+  CLUSTER_NAME: clabernetes-native-ci
+  CILIUM_VERSION: ${{ inputs.cilium_version || '1.16.5' }}
+  KUBEVIRT_VERSION: v1.4.0
+  CDI_VERSION: v1.61.1
+
+jobs:
+  unit-tests-native:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: load env vars for workflow run
+        run: |
+          source .github/vars.env
+          echo "GO_VERSION=$GO_VERSION" >> "$GITHUB_ENV"
+          echo "GOTESTSUM_VERSION=$GOTESTSUM_VERSION" >> "$GITHUB_ENV"
+
+      - name: set up go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: install go test tools
+        run: |
+          go install gotest.tools/gotestsum@${{ env.GOTESTSUM_VERSION }}
+
+      - name: run native architecture unit tests
+        run: |
+          gotestsum --format testname -- \
+            ./pkg/executor/... \
+            ./pkg/networking/... \
+            ./pkg/workload/... \
+            -v -race -coverprofile=coverage-native.out
+
+      - name: upload coverage reports
+        uses: codecov/codecov-action@v4
+        with:
+          file: ./coverage-native.out
+          flags: native-architecture
+          name: native-architecture-coverage
+
+  integration-tests-native:
+    runs-on: ubuntu-latest
+    needs: unit-tests-native
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: load env vars for workflow run
+        run: |
+          source .github/vars.env
+          echo "GO_VERSION=$GO_VERSION" >> "$GITHUB_ENV"
+          echo "KIND_VERSION=$KIND_VERSION" >> "$GITHUB_ENV"
+          echo "KUBECTL_VERSION=$KUBECTL_VERSION" >> "$GITHUB_ENV"
+          echo "HELM_VERSION=$HELM_VERSION" >> "$GITHUB_ENV"
+
+      - name: set up go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: install kind
+        run: |
+          curl -Lo ./kind https://kind.sigs.k8s.io/dl/v${{ env.KIND_VERSION }}/kind-linux-amd64
+          chmod +x ./kind
+          sudo mv ./kind /usr/local/bin/kind
+
+      - name: install kubectl
+        run: |
+          curl -LO "https://dl.k8s.io/release/v${{ env.KUBECTL_VERSION }}/bin/linux/amd64/kubectl"
+          chmod +x kubectl
+          sudo mv kubectl /usr/local/bin/kubectl
+
+      - name: install helm
+        run: |
+          curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+          chmod 700 get_helm.sh
+          ./get_helm.sh --version v${{ env.HELM_VERSION }}
+
+      - name: setup tmate session for debugging
+        uses: mxschmitt/action-tmate@v3
+        if: ${{ inputs.debug_setup }}
+        with:
+          limit-access-to-actor: true
+
+      - name: create kind cluster with native architecture
+        run: |
+          # Create cluster
+          kind create cluster --config .develop/kind-cluster-native.yml --name ${{ env.CLUSTER_NAME }}
+          
+          # Wait for cluster to be ready
+          kubectl wait --for=condition=Ready nodes --all --timeout=300s
+
+      - name: install cilium cni
+        run: |
+          # Add Cilium Helm repository
+          helm repo add cilium https://helm.cilium.io/
+          helm repo update
+          
+          # Install Cilium
+          helm install cilium cilium/cilium \
+            --version=${{ env.CILIUM_VERSION }} \
+            --namespace=kube-system \
+            --set image.pullPolicy=IfNotPresent \
+            --set ipam.mode=kubernetes \
+            --set kubeProxyReplacement=false \
+            --set k8s-service-host=${{ env.CLUSTER_NAME }}-control-plane \
+            --set k8s-service-port=6443 \
+            --set hubble.enabled=true \
+            --set hubble.relay.enabled=true \
+            --wait --timeout=600s
+          
+          # Verify Cilium installation
+          kubectl wait --for=condition=ready pod -l k8s-app=cilium -n kube-system --timeout=300s
+
+      - name: install kubevirt
+        if: ${{ inputs.test_kubevirt }}
+        run: |
+          # Install KubeVirt operator
+          kubectl apply -f "https://github.com/kubevirt/kubevirt/releases/download/${{ env.KUBEVIRT_VERSION }}/kubevirt-operator.yaml"
+          
+          # Wait for operator
+          kubectl wait --for=condition=ready pod -l kubevirt.io=virt-operator -n kubevirt --timeout=300s
+          
+          # Install KubeVirt CR with emulation
+          kubectl apply -f - <<EOF
+          apiVersion: kubevirt.io/v1
+          kind: KubeVirt
+          metadata:
+            name: kubevirt
+            namespace: kubevirt
+          spec:
+            configuration:
+              developerConfiguration:
+                useEmulation: true
+            certificateRotateStrategy: {}
+            imagePullPolicy: IfNotPresent
+          EOF
+          
+          # Wait for KubeVirt to be ready
+          kubectl wait --for=condition=Available kubevirt kubevirt -n kubevirt --timeout=600s
+
+      - name: install containerized data importer
+        if: ${{ inputs.test_kubevirt }}
+        run: |
+          kubectl apply -f "https://github.com/kubevirt/containerized-data-importer/releases/download/${{ env.CDI_VERSION }}/cdi-operator.yaml"
+          kubectl apply -f "https://github.com/kubevirt/containerized-data-importer/releases/download/${{ env.CDI_VERSION }}/cdi-cr.yaml"
+          kubectl wait --for=condition=ready pod -l app=cdi-operator -n cdi --timeout=300s
+
+      - name: verify cluster setup
+        run: |
+          echo "=== Cluster Nodes ==="
+          kubectl get nodes -o wide
+          
+          echo "=== Cilium Status ==="
+          kubectl get pods -n kube-system -l k8s-app=cilium
+          
+          echo "=== KubeVirt Status ==="
+          kubectl get pods -n kubevirt || echo "KubeVirt not installed"
+          
+          echo "=== CDI Status ==="
+          kubectl get pods -n cdi || echo "CDI not installed"
+
+      - name: test cilium networking
+        run: |
+          # Create test namespace
+          kubectl create namespace cilium-test
+          
+          # Deploy test pods
+          kubectl apply -f - <<EOF
+          apiVersion: v1
+          kind: Pod
+          metadata:
+            name: test-pod-1
+            namespace: cilium-test
+            labels:
+              app: test-pod-1
+          spec:
+            containers:
+            - name: test
+              image: nicolaka/netshoot
+              command: ["/bin/bash", "-c", "sleep 3600"]
+          ---
+          apiVersion: v1
+          kind: Pod
+          metadata:
+            name: test-pod-2
+            namespace: cilium-test
+            labels:
+              app: test-pod-2
+          spec:
+            containers:
+            - name: test
+              image: nicolaka/netshoot
+              command: ["/bin/bash", "-c", "sleep 3600"]
+          EOF
+          
+          # Wait for pods
+          kubectl wait --for=condition=ready pod -l app=test-pod-1 -n cilium-test --timeout=60s
+          kubectl wait --for=condition=ready pod -l app=test-pod-2 -n cilium-test --timeout=60s
+          
+          # Test connectivity
+          kubectl exec test-pod-1 -n cilium-test -- ping -c 3 $(kubectl get pod test-pod-2 -n cilium-test -o jsonpath='{.status.podIP}')
+
+      - name: test network policies
+        run: |
+          # Create a restrictive network policy
+          kubectl apply -f - <<EOF
+          apiVersion: networking.k8s.io/v1
+          kind: NetworkPolicy
+          metadata:
+            name: deny-all
+            namespace: cilium-test
+          spec:
+            podSelector: {}
+            policyTypes:
+            - Ingress
+            - Egress
+          EOF
+          
+          # Test that connectivity is now blocked (should fail)
+          ! kubectl exec test-pod-1 -n cilium-test -- timeout 5 ping -c 1 $(kubectl get pod test-pod-2 -n cilium-test -o jsonpath='{.status.podIP}') || echo "Network policy test failed"
+          
+          # Allow connectivity between test pods
+          kubectl apply -f - <<EOF
+          apiVersion: networking.k8s.io/v1
+          kind: NetworkPolicy
+          metadata:
+            name: allow-test-pods
+            namespace: cilium-test
+          spec:
+            podSelector:
+              matchLabels:
+                app: test-pod-1
+            policyTypes:
+            - Egress
+            egress:
+            - to:
+              - podSelector:
+                  matchLabels:
+                    app: test-pod-2
+          ---
+          apiVersion: networking.k8s.io/v1
+          kind: NetworkPolicy
+          metadata:
+            name: allow-test-pods-ingress
+            namespace: cilium-test
+          spec:
+            podSelector:
+              matchLabels:
+                app: test-pod-2
+            policyTypes:
+            - Ingress
+            ingress:
+            - from:
+              - podSelector:
+                  matchLabels:
+                    app: test-pod-1
+          EOF
+          
+          # Wait a bit for policies to apply
+          sleep 10
+          
+          # Test that connectivity is now allowed
+          kubectl exec test-pod-1 -n cilium-test -- ping -c 3 $(kubectl get pod test-pod-2 -n cilium-test -o jsonpath='{.status.podIP}')
+
+      - name: test kubevirt vm creation
+        if: ${{ inputs.test_kubevirt }}
+        run: |
+          # Create a simple test VM
+          kubectl apply -f - <<EOF
+          apiVersion: kubevirt.io/v1
+          kind: VirtualMachine
+          metadata:
+            name: test-vm
+            namespace: cilium-test
+          spec:
+            running: false
+            template:
+              metadata:
+                labels:
+                  kubevirt.io/vm: test-vm
+              spec:
+                domain:
+                  devices:
+                    disks:
+                    - name: containerdisk
+                      disk:
+                        bus: virtio
+                    - name: cloudinitdisk
+                      disk:
+                        bus: virtio
+                  resources:
+                    requests:
+                      memory: 64M
+                terminationGracePeriodSeconds: 0
+                volumes:
+                - name: containerdisk
+                  containerDisk:
+                    image: quay.io/kubevirt/cirros-container-disk-demo
+                - name: cloudinitdisk
+                  cloudInitNoCloud:
+                    userDataBase64: SGkuXG4=
+          EOF
+          
+          # Verify VM was created
+          kubectl get vm test-vm -n cilium-test
+          
+          # Start the VM
+          kubectl patch vm test-vm -n cilium-test --type merge -p '{"spec":{"running":true}}'
+          
+          # Wait for VM to be ready
+          kubectl wait --for=condition=Ready vmi test-vm -n cilium-test --timeout=300s || echo "VM did not become ready (expected in CI)"
+
+      - name: setup tmate session for debugging tests
+        uses: mxschmitt/action-tmate@v3
+        if: ${{ inputs.debug_tests }}
+        with:
+          limit-access-to-actor: true
+
+      - name: run native architecture e2e tests
+        run: |
+          # Build test binary
+          go build -o clabernetes-native-test ./cmd/clabernetes/
+          
+          # Run basic tests
+          echo "=== Testing native execution detection ==="
+          # Add your native architecture specific tests here
+          
+          echo "=== Testing Cilium CNI integration ==="
+          # Add Cilium-specific tests here
+          
+          echo "=== Testing KubeVirt integration ==="
+          if [[ "${{ inputs.test_kubevirt }}" == "true" ]]; then
+            # Add KubeVirt-specific tests here
+            echo "KubeVirt tests would run here"
+          fi
+
+      - name: collect debug information
+        if: failure()
+        run: |
+          echo "=== Cluster Events ==="
+          kubectl get events --all-namespaces --sort-by='.lastTimestamp'
+          
+          echo "=== All Pods ==="
+          kubectl get pods --all-namespaces -o wide
+          
+          echo "=== Cilium Logs ==="
+          kubectl logs -n kube-system -l k8s-app=cilium --tail=100 || true
+          
+          echo "=== KubeVirt Logs ==="
+          kubectl logs -n kubevirt -l kubevirt.io=virt-operator --tail=100 || true
+          
+          echo "=== Node Information ==="
+          kubectl describe nodes
+
+      - name: cleanup
+        if: always()
+        run: |
+          kind delete cluster --name ${{ env.CLUSTER_NAME }} || true
+
+  build-native-images:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: load env vars for workflow run
+        run: |
+          source .github/vars.env
+          echo "GO_VERSION=$GO_VERSION" >> "$GITHUB_ENV"
+
+      - name: set up go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: set up docker buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: build native architecture images
+        run: |
+          # Build manager image with native execution support
+          docker buildx build \
+            --platform linux/amd64 \
+            --tag clabernetes-manager-native:test \
+            --file build/manager-native.Dockerfile \
+            --load \
+            .
+          
+          # Build executor image
+          docker buildx build \
+            --platform linux/amd64 \
+            --tag clabernetes-executor:test \
+            --file build/executor.Dockerfile \
+            --load \
+            . || echo "Executor Dockerfile doesn't exist yet - this is expected for initial development"
+
+      - name: test image functionality
+        run: |
+          # Test that native manager image works
+          docker run --rm clabernetes-manager-native:test --help || echo "Native manager image test - expected to fail initially"

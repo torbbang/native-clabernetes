@@ -1,0 +1,334 @@
+---
+version: v2beta1
+name: clabernetes-native
+
+vars:
+  DEVSPACE_FLAGS: "-n clabernetes-system"
+
+  REGISTRY:
+    source: env
+    default: ghcr.io/srl-labs/clabernetes
+
+  PULL_POLICY: IfNotPresent
+
+  CLABERNETES: clabernetes
+  IMAGE_BASE: ${REGISTRY}/${CLABERNETES}
+  MANAGER_IMAGE: ${REGISTRY}/${CLABERNETES}-manager
+  MANAGER_DEV_IMAGE: ${MANAGER_IMAGE}-native-dev
+  # Remove launcher image since we're using native execution
+  UI_IMAGE: ${REGISTRY}/${CLABERNETES}-ui
+  CLABVERTER_IMAGE: ${REGISTRY}/clabverter
+
+  # Native architecture specific images
+  EXECUTOR_IMAGE: ${REGISTRY}/${CLABERNETES}-executor  # New native executor
+  
+  VERSION: 0.0.0
+  COMMIT_HASH: $(git describe --always --abbrev=8)
+  RELEASE_VERSION: ""
+
+  CLABERNETES_DEV_DOMAIN:
+    source: env
+    default: containerlab.dev
+
+  # Development cluster configuration
+  CLUSTER_NAME: clabernetes-native
+  CILIUM_VERSION: 1.16.5
+  KUBEVIRT_VERSION: v1.4.0
+
+localRegistry:
+  enabled: false
+
+images:
+  clabernetes-native-dev:
+    createPullSecret: false
+    image: ${MANAGER_DEV_IMAGE}
+    context: ../
+    dockerfile: dev-native.Dockerfile
+    rebuildStrategy: ignoreContextChanges
+    buildKit: {}
+    tags:
+      - ${COMMIT_HASH}
+
+  clabernetes-native:
+    createPullSecret: false
+    image: ${MANAGER_IMAGE}
+    context: ../
+    dockerfile: ../build/manager-native.Dockerfile
+    rebuildStrategy: ignoreContextChanges
+    buildArgs:
+      VERSION: ${VERSION}-${COMMIT_HASH}
+    buildKit: {}
+    tags:
+      - native-latest
+      - ${COMMIT_HASH}
+
+  clabernetes-executor:
+    createPullSecret: false
+    image: ${EXECUTOR_IMAGE}
+    context: ../
+    dockerfile: ../build/executor.Dockerfile
+    rebuildStrategy: ignoreContextChanges
+    buildArgs:
+      VERSION: ${VERSION}-${COMMIT_HASH}
+    buildKit: {}
+    tags:
+      - native-latest
+      - ${COMMIT_HASH}
+
+  clabernetes-ui:
+    createPullSecret: false
+    image: ${UI_IMAGE}
+    context: ../ui/
+    dockerfile: ../build/ui.Dockerfile
+    rebuildStrategy: ignoreContextChanges
+    buildArgs:
+      VERSION: ${VERSION}-${COMMIT_HASH}
+    buildKit: {}
+    tags:
+      - dev-latest
+      - ${COMMIT_HASH}
+
+  clabverter:
+    createPullSecret: false
+    image: ${CLABVERTER_IMAGE}
+    context: ../
+    dockerfile: ../build/clabverter.Dockerfile
+    rebuildStrategy: ignoreContextChanges
+    buildArgs:
+      VERSION: ${VERSION}-${COMMIT_HASH}
+    buildKit: {}
+    tags:
+      - dev-latest
+      - ${COMMIT_HASH}
+
+deployments:
+  clabernetes-native:
+    helm:
+      displayOutput: true
+      chart:
+        name: ../charts/clabernetes
+      values:
+        manager:
+          image: ${MANAGER_IMAGE}
+          imagePullPolicy: ${PULL_POLICY}
+          # Enable native execution mode
+          env:
+            - name: EXECUTION_MODE
+              value: "native"
+            - name: CILIUM_ENABLED
+              value: "true"
+            - name: KUBEVIRT_ENABLED
+              value: "true"
+        ui:
+          image: ${UI_IMAGE}
+          imagePullPolicy: ${PULL_POLICY}
+        globalConfig:
+          deployment:
+            # Use executor image instead of launcher
+            executorImage: ${EXECUTOR_IMAGE}
+            executorImagePullPolicy: ${PULL_POLICY}
+            # Enable native networking
+            networkingMode: "cilium"
+            # Enable KubeVirt support
+            kubevirtEnabled: true
+        clicker:
+          image: ${MANAGER_IMAGE}
+          imagePullPolicy: ${PULL_POLICY}
+
+  # Deploy Cilium if not already present
+  cilium:
+    helm:
+      displayOutput: true
+      chart:
+        repo: https://helm.cilium.io/
+        name: cilium
+        version: ${CILIUM_VERSION}
+      values:
+        image:
+          pullPolicy: IfNotPresent
+        ipam:
+          mode: kubernetes
+        kubeProxyReplacement: false
+        k8sServiceHost: ${CLUSTER_NAME}-control-plane
+        k8sServicePort: 6443
+        hubble:
+          enabled: true
+          metrics:
+            enabled:
+              - dns
+              - drop
+              - tcp
+              - flow
+              - port-distribution
+              - icmp
+              - httpV2:exemplars=true;labelsContext=source_ip,source_namespace,source_workload,destination_ip,destination_namespace,destination_workload,traffic_direction
+          relay:
+            enabled: true
+          ui:
+            enabled: true
+        prometheus:
+          enabled: true
+        operator:
+          prometheus:
+            enabled: true
+
+dev:
+  clabernetes-native:
+    labelSelector:
+      clabernetes/app: clabernetes
+      clabernetes/component: manager
+    container: manager
+    devImage: ${MANAGER_DEV_IMAGE}
+    sync:
+      - path: ../.develop/:/clabernetes/.develop/
+        disableDownload: true
+      - path: ../:/clabernetes/
+        disableDownload: true
+        excludeFile: .dockerignore
+    terminal:
+      command: .develop/start-native.sh
+
+profiles:
+  - name: native-dev
+    patches:
+      - op: add
+        path: deployments.clabernetes-native.helm.values.ui
+        value:
+          enabled: true
+          ingress:
+            enabled: true
+            host: ui.clabernetes.${CLABERNETES_DEV_DOMAIN}
+
+  - name: debug
+    patches:
+      - op: add
+        path: deployments.clabernetes-native.helm.values.manager.managerLogLevel
+        value: debug
+      - op: add
+        path: deployments.clabernetes-native.helm.values.manager.controllerLogLevel
+        value: debug
+      - op: add
+        path: deployments.clabernetes-native.helm.values.globalConfig.deployment.executorLogLevel
+        value: debug
+
+  - name: single-manager
+    patches:
+      - op: add
+        path: deployments.clabernetes-native.helm.values.manager.replicaCount
+        value: 1
+
+  - name: single-ui
+    patches:
+      - op: add
+        path: deployments.clabernetes-native.helm.values.ui.replicaCount
+        value: 1
+
+  - name: cilium-only
+    patches:
+      - op: remove
+        path: deployments.clabernetes-native
+
+  - name: kubevirt-test
+    patches:
+      - op: add
+        path: deployments.clabernetes-native.helm.values.globalConfig.deployment
+        value:
+          executorImage: ${EXECUTOR_IMAGE}
+          executorImagePullPolicy: ${PULL_POLICY}
+          networkingMode: "cilium"
+          kubevirtEnabled: true
+          vmNodeDetection: true
+
+  - name: hybrid-mode
+    patches:
+      - op: add
+        path: deployments.clabernetes-native.helm.values.manager.env
+        value:
+          - name: EXECUTION_MODE
+            value: "hybrid"  # Support both legacy and native
+
+  - name: always-pull
+    patches:
+      - op: replace
+        path: deployments.clabernetes-native.helm.values.manager.imagePullPolicy
+        value: Always
+      - op: replace
+        path: deployments.clabernetes-native.helm.values.globalConfig.deployment.executorImagePullPolicy
+        value: Always
+
+commands:
+  # Setup native development environment
+  setup-env: |-
+    echo "Setting up native architecture development environment..."
+    .develop/setup-native-dev.sh
+
+  # Quick cluster setup for testing
+  quick-cluster: |-
+    echo "Creating quick test cluster..."
+    kind create cluster --config .develop/kind-cluster-native.yml --name ${CLUSTER_NAME}
+
+  # Install only Cilium for testing
+  install-cilium: |-
+    helm repo add cilium https://helm.cilium.io/
+    helm repo update
+    helm upgrade --install cilium cilium/cilium --version=${CILIUM_VERSION} --namespace=kube-system --wait
+
+  # Install KubeVirt for VM testing
+  install-kubevirt: |-
+    kubectl apply -f https://github.com/kubevirt/kubevirt/releases/download/${KUBEVIRT_VERSION}/kubevirt-operator.yaml
+    kubectl apply -f https://github.com/kubevirt/kubevirt/releases/download/${KUBEVIRT_VERSION}/kubevirt-cr.yaml
+
+  # Test native connectivity
+  test-connectivity: |-
+    kubectl apply -f - <<EOF
+    apiVersion: v1
+    kind: Pod
+    metadata:
+      name: connectivity-test
+      namespace: clabernetes-system
+    spec:
+      containers:
+      - name: test
+        image: nicolaka/netshoot
+        command: ["/bin/bash", "-c", "sleep 3600"]
+    EOF
+    kubectl wait --for=condition=ready pod connectivity-test -n clabernetes-system --timeout=60s
+    kubectl exec -it connectivity-test -n clabernetes-system -- ping -c 3 8.8.8.8
+
+  # Clean up development environment
+  cleanup: |-
+    kind delete cluster --name ${CLUSTER_NAME} || true
+    docker system prune -f
+
+pipelines:
+  build-native:
+    run: |
+      build_images clabernetes-native clabernetes-executor clabernetes-ui clabverter
+
+  dev-native:
+    run: |
+      build_images clabernetes-native-dev clabernetes-native clabernetes-executor clabernetes-ui
+      create_deployments --all
+      start_dev --all
+
+  deploy-native:
+    run: |
+      run_dependencies --all
+      build_images clabernetes-native clabernetes-executor clabernetes-ui
+      create_deployments --all
+
+  test-native:
+    run: |
+      build_images clabernetes-native clabernetes-executor
+      create_deployments clabernetes-native
+      run_default_command test-connectivity
+
+  purge-native:
+    run: |-
+      stop_dev --all
+      purge_deployments --all
+      kubectl delete leases -n ${DEVSPACE_NAMESPACE} \
+        $(kubectl get leases -n ${DEVSPACE_NAMESPACE} 2> /dev/null | grep "clabernetes" | awk '{print $1}') 2> /dev/null || true
+      kubectl delete crds \
+        $(kubectl get crds 2> /dev/null | grep "clabernetes\|kubevirt\|cdi" | awk '{print $1}') 2> /dev/null || true
+      kubectl delete namespaces kubevirt cdi 2> /dev/null || true
