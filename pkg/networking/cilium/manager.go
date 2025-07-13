@@ -105,7 +105,7 @@ func (m *Manager) generateNetworkPolicies(topology *clabernetesapisv1alpha1.Topo
 	
 	// Get topology definition
 	definition := topology.Spec.Definition
-	if definition == nil {
+	if definition.Containerlab == "" && definition.Kne == "" {
 		return policies, nil
 	}
 	
@@ -118,7 +118,8 @@ func (m *Manager) generateNetworkPolicies(topology *clabernetesapisv1alpha1.Topo
 	policies = append(policies, mgmtPolicy)
 	
 	// Process topology links to create connectivity policies
-	linkPolicies := m.createLinkPolicies(topology, definition.Links)
+	// Note: For now, we'll create basic policies without parsing the containerlab definition
+	linkPolicies := m.createLinkPolicies(topology, []interface{}{})
 	policies = append(policies, linkPolicies...)
 	
 	// Create policies for external access if specified
@@ -190,15 +191,15 @@ func (m *Manager) createManagementPolicy(topology *clabernetesapisv1alpha1.Topol
 					},
 					Ports: []networkingv1.NetworkPolicyPort{
 						{
-							Port:     &intstr.FromInt(22),  // SSH
+							Port:     func() *intstr.IntOrString { p := intstr.FromInt(22); return &p }(),  // SSH
 							Protocol: &protocolTCP,
 						},
 						{
-							Port:     &intstr.FromInt(830), // NETCONF
+							Port:     func() *intstr.IntOrString { p := intstr.FromInt(830); return &p }(), // NETCONF
 							Protocol: &protocolTCP,
 						},
 						{
-							Port:     &intstr.FromInt(57400), // gNMI
+							Port:     func() *intstr.IntOrString { p := intstr.FromInt(57400); return &p }(), // gNMI
 							Protocol: &protocolTCP,
 						},
 					},
@@ -209,11 +210,11 @@ func (m *Manager) createManagementPolicy(topology *clabernetesapisv1alpha1.Topol
 					// Allow DNS
 					Ports: []networkingv1.NetworkPolicyPort{
 						{
-							Port:     &intstr.FromInt(53),
+							Port:     func() *intstr.IntOrString { p := intstr.FromInt(53); return &p }(),
 							Protocol: &protocolUDP,
 						},
 						{
-							Port:     &intstr.FromInt(53),
+							Port:     func() *intstr.IntOrString { p := intstr.FromInt(53); return &p }(),
 							Protocol: &protocolTCP,
 						},
 					},
@@ -223,11 +224,11 @@ func (m *Manager) createManagementPolicy(topology *clabernetesapisv1alpha1.Topol
 					To: []networkingv1.NetworkPolicyPeer{},
 					Ports: []networkingv1.NetworkPolicyPort{
 						{
-							Port:     &intstr.FromInt(80),
+							Port:     func() *intstr.IntOrString { p := intstr.FromInt(80); return &p }(),
 							Protocol: &protocolTCP,
 						},
 						{
-							Port:     &intstr.FromInt(443),
+							Port:     func() *intstr.IntOrString { p := intstr.FromInt(443); return &p }(),
 							Protocol: &protocolTCP,
 						},
 					},
@@ -362,15 +363,15 @@ func (m *Manager) createExternalAccessPolicies(topology *clabernetesapisv1alpha1
 					From: []networkingv1.NetworkPolicyPeer{},
 					Ports: []networkingv1.NetworkPolicyPort{
 						{
-							Port:     &intstr.FromInt(22),
+							Port:     func() *intstr.IntOrString { p := intstr.FromInt(22); return &p }(),
 							Protocol: &protocolTCP,
 						},
 						{
-							Port:     &intstr.FromInt(80),
+							Port:     func() *intstr.IntOrString { p := intstr.FromInt(80); return &p }(),
 							Protocol: &protocolTCP,
 						},
 						{
-							Port:     &intstr.FromInt(443),
+							Port:     func() *intstr.IntOrString { p := intstr.FromInt(443); return &p }(),
 							Protocol: &protocolTCP,
 						},
 					},

@@ -3,7 +3,6 @@ package container
 import (
 	"context"
 	"fmt"
-	"strconv"
 
 	"github.com/srl-labs/clabernetes/pkg/executor/common"
 	clabernetesconstants "github.com/srl-labs/clabernetes/constants"

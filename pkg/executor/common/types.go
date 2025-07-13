@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"strings"
 
-	clabernetesapisv1alpha1 "github.com/srl-labs/clabernetes/apis/v1alpha1"
 	claberneteslogging "github.com/srl-labs/clabernetes/logging"
 	clabernetesgeneratedclientset "github.com/srl-labs/clabernetes/generated/clientset"
 	k8scorev1 "k8s.io/api/core/v1"

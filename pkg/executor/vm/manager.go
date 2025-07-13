@@ -235,7 +235,7 @@ func (e *VMExecutor) renderVirtualMachine(config *common.NodeConfig) map[string]
 	}
 	
 	// Add data interfaces for topology links
-	for i, intf := range config.Interfaces {
+	for i, _ := range config.Interfaces {
 		interfaces = append(interfaces, map[string]interface{}{
 			"name": fmt.Sprintf("net%d", i+1),
 			"bridge": map[string]interface{}{},
