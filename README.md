@@ -1,5 +1,3 @@
-[![Go Report](https://goreportcard.com/badge/github.com/torbbang/native-clabernetes)](https://goreportcard.com/report/github.com/torbbang/native-clabernetes)
-
 # ⚠️ EXPERIMENTAL FORK - NATIVE CLABERNETES
 
 > **🚨 IMPORTANT DISCLAIMER 🚨**
