@@ -18,7 +18,7 @@
 >
 > **For production use, please use the original [srl-labs/clabernetes](https://github.com/srl-labs/clabernetes) project.**
 
-# clabernetes a.k.a c9s
+# native-clabernetes a.k.a NC9S
 
 <p>
   <img src="https://gitlab.com/rdodin/pics/-/wikis/uploads/b5d611838fcb9c588b6311bccf11b954/c9s_logo1-upscale2x-white-tag+font-min__1_.png" width="200" align="left" alt="clabernetes"/>
