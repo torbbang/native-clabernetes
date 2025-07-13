@@ -68,6 +68,9 @@ type TopologySpec struct {
 	// +kubebuilder:validation:Enum=vxlan;slurpeeth
 	// +kubebuilder:default=vxlan
 	Connectivity string `json:"connectivity,omitempty"`
+	// NativeExecution holds configuration for native Kubernetes execution mode
+	// +optional
+	NativeExecution NativeExecution `json:"nativeExecution,omitempty"`
 }
 
 // TopologyStatus is the status for a Topology resource.

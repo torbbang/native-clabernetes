@@ -1,6 +1,10 @@
 package v1alpha1
 
-import k8scorev1 "k8s.io/api/core/v1"
+import (
+	k8scorev1 "k8s.io/api/core/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/util/intstr"
+)
 
 // FileFromConfigMap represents a file that you would like to mount (from a configmap) in the
 // launcher pod for a given node.
@@ -337,4 +341,220 @@ type ImagePull struct {
 	// in here in the event your cluster doesn't support the preferred image pull through option.
 	// +optional
 	DockerConfig string `json:"dockerConfig,omitempty"`
+}
+
+// ExecutionMode represents the execution strategy for workloads in a topology
+// +kubebuilder:validation:Enum=legacy;native;container;vm;auto;hybrid
+type ExecutionMode string
+
+const (
+	// ExecutionModeLegacy uses the legacy Docker-in-Docker approach (default for compatibility)
+	ExecutionModeLegacy ExecutionMode = "legacy"
+	// ExecutionModeNative uses native Kubernetes execution with Cilium CNI
+	ExecutionModeNative ExecutionMode = "native"
+	// ExecutionModeContainer forces all nodes to run as native containers
+	ExecutionModeContainer ExecutionMode = "container"
+	// ExecutionModeVM forces all nodes to run as KubeVirt VMs
+	ExecutionModeVM ExecutionMode = "vm"
+	// ExecutionModeAuto automatically detects the best execution mode per node
+	ExecutionModeAuto ExecutionMode = "auto"
+	// ExecutionModeHybrid allows mixed execution modes within a topology
+	ExecutionModeHybrid ExecutionMode = "hybrid"
+)
+
+// NativeExecution holds configuration specific to native Kubernetes execution
+type NativeExecution struct {
+	// ExecutionMode specifies how nodes in this topology should be executed
+	// +kubebuilder:default=legacy
+	// +optional
+	ExecutionMode ExecutionMode `json:"executionMode,omitempty"`
+	
+	// Networking defines networking configuration for native execution
+	// +optional
+	Networking NativeNetworking `json:"networking,omitempty"`
+	
+	// NodeOverrides allows per-node execution mode overrides
+	// +optional
+	NodeOverrides map[string]NodeExecutionOverride `json:"nodeOverrides,omitempty"`
+	
+	// VirtualMachine holds VM-specific configuration
+	// +optional
+	VirtualMachine VMConfiguration `json:"virtualMachine,omitempty"`
+}
+
+// NativeNetworking defines networking configuration for native execution
+type NativeNetworking struct {
+	// CNI specifies the Container Network Interface to use
+	// +kubebuilder:validation:Enum=cilium;calico;flannel
+	// +kubebuilder:default=cilium
+	// +optional
+	CNI string `json:"cni,omitempty"`
+	
+	// NetworkPolicies defines custom network policies for the topology
+	// +optional
+	NetworkPolicies []NetworkPolicySpec `json:"networkPolicies,omitempty"`
+	
+	// ServiceMesh enables service mesh features (Cilium only)
+	// +optional
+	ServiceMesh ServiceMeshConfig `json:"serviceMesh,omitempty"`
+	
+	// DisableDefaultPolicies disables automatic network policy generation
+	// +optional
+	DisableDefaultPolicies bool `json:"disableDefaultPolicies,omitempty"`
+}
+
+// NetworkPolicySpec defines a custom network policy
+type NetworkPolicySpec struct {
+	// Name is the name of the network policy
+	Name string `json:"name"`
+	
+	// Description provides a human-readable description
+	// +optional
+	Description string `json:"description,omitempty"`
+	
+	// Selector specifies which nodes this policy applies to
+	Selector NodeSelector `json:"selector"`
+	
+	// Rules defines the network policy rules
+	Rules NetworkPolicyRules `json:"rules"`
+}
+
+// NodeSelector defines how to select nodes for policies
+type NodeSelector struct {
+	// NodeNames specifies specific node names
+	// +optional
+	NodeNames []string `json:"nodeNames,omitempty"`
+	
+	// NodeKinds specifies node kinds (e.g., "srl", "ceos")
+	// +optional
+	NodeKinds []string `json:"nodeKinds,omitempty"`
+	
+	// Labels specifies label selectors
+	// +optional
+	Labels map[string]string `json:"labels,omitempty"`
+}
+
+// NetworkPolicyRules defines ingress and egress rules
+type NetworkPolicyRules struct {
+	// Ingress rules
+	// +optional
+	Ingress []NetworkPolicyRule `json:"ingress,omitempty"`
+	
+	// Egress rules
+	// +optional
+	Egress []NetworkPolicyRule `json:"egress,omitempty"`
+}
+
+// NetworkPolicyRule defines a single network policy rule
+type NetworkPolicyRule struct {
+	// From/To specifies the source/destination for this rule
+	// +optional
+	From []NetworkPolicyPeer `json:"from,omitempty"`
+	// +optional
+	To []NetworkPolicyPeer `json:"to,omitempty"`
+	
+	// Ports specifies the ports this rule applies to
+	// +optional
+	Ports []NetworkPolicyPort `json:"ports,omitempty"`
+}
+
+// NetworkPolicyPeer defines a network policy peer
+type NetworkPolicyPeer struct {
+	// NodeSelector selects nodes by criteria
+	// +optional
+	NodeSelector *NodeSelector `json:"nodeSelector,omitempty"`
+	
+	// External indicates this is external traffic
+	// +optional
+	External bool `json:"external,omitempty"`
+	
+	// CIDR specifies a CIDR block
+	// +optional
+	CIDR string `json:"cidr,omitempty"`
+}
+
+// NetworkPolicyPort defines a port for network policies
+type NetworkPolicyPort struct {
+	// Port number or name
+	// +optional
+	Port *intstr.IntOrString `json:"port,omitempty"`
+	
+	// Protocol (TCP, UDP, SCTP)
+	// +kubebuilder:validation:Enum=TCP;UDP;SCTP
+	// +optional
+	Protocol string `json:"protocol,omitempty"`
+}
+
+// ServiceMeshConfig configures service mesh features
+type ServiceMeshConfig struct {
+	// Enabled enables service mesh features
+	// +optional
+	Enabled bool `json:"enabled,omitempty"`
+	
+	// Encryption enables transparent encryption
+	// +optional
+	Encryption bool `json:"encryption,omitempty"`
+	
+	// LoadBalancing specifies load balancing algorithm
+	// +kubebuilder:validation:Enum=round_robin;least_request;random;maglev
+	// +optional
+	LoadBalancing string `json:"loadBalancing,omitempty"`
+}
+
+// NodeExecutionOverride allows overriding execution mode for specific nodes
+type NodeExecutionOverride struct {
+	// ExecutionMode overrides the execution mode for this node
+	ExecutionMode ExecutionMode `json:"executionMode"`
+	
+	// Resources overrides resource requirements for this node
+	// +optional
+	Resources *k8scorev1.ResourceRequirements `json:"resources,omitempty"`
+	
+	// Config provides node-specific configuration
+	// +optional
+	Config map[string]string `json:"config,omitempty"`
+}
+
+// VMConfiguration holds configuration specific to KubeVirt virtual machines
+type VMConfiguration struct {
+	// DefaultResources specifies default resources for VMs
+	// +optional
+	DefaultResources *k8scorev1.ResourceRequirements `json:"defaultResources,omitempty"`
+	
+	// StorageClass specifies the storage class for VM disks
+	// +optional
+	StorageClass string `json:"storageClass,omitempty"`
+	
+	// CloudInit provides cloud-init configuration template
+	// +optional
+	CloudInit string `json:"cloudInit,omitempty"`
+	
+	// EnableVirtIO enables VirtIO devices
+	// +kubebuilder:default=true
+	// +optional
+	EnableVirtIO bool `json:"enableVirtIO,omitempty"`
+	
+	// NetworkInterfaces defines VM network interface configuration
+	// +optional
+	NetworkInterfaces []VMNetworkInterface `json:"networkInterfaces,omitempty"`
+}
+
+// VMNetworkInterface defines a network interface for VMs
+type VMNetworkInterface struct {
+	// Name is the interface name
+	Name string `json:"name"`
+	
+	// Type specifies the interface type
+	// +kubebuilder:validation:Enum=bridge;masquerade;sriov;multus
+	// +kubebuilder:default=bridge
+	// +optional
+	Type string `json:"type,omitempty"`
+	
+	// NetworkName specifies the network to connect to
+	// +optional
+	NetworkName string `json:"networkName,omitempty"`
+	
+	// MAC specifies the MAC address
+	// +optional
+	MAC string `json:"mac,omitempty"`
 }

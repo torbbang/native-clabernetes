@@ -145,3 +145,49 @@ const (
 	// ClickerGlobalLabels -- see also ClickerGlobalAnnotations -- same thing just for labels.
 	ClickerGlobalLabels = "CLICKER_GLOBAL_LABELS"
 )
+
+const (
+	// Native execution environment variables
+	
+	// ExecutionModeEnv specifies the execution mode for topologies
+	ExecutionModeEnv = "EXECUTION_MODE"
+	
+	// CiliumEnabledEnv indicates whether Cilium CNI is enabled
+	CiliumEnabledEnv = "CILIUM_ENABLED"
+	
+	// KubeVirtEnabledEnv indicates whether KubeVirt is enabled for VM workloads
+	KubeVirtEnabledEnv = "KUBEVIRT_ENABLED"
+	
+	// ExecutorImageEnv specifies the image to use for the native executor
+	ExecutorImageEnv = "EXECUTOR_IMAGE"
+	
+	// ExecutorImagePullPolicyEnv specifies the pull policy for executor images
+	ExecutorImagePullPolicyEnv = "EXECUTOR_IMAGE_PULL_POLICY"
+	
+	// ExecutorLogLevelEnv sets the executor log level
+	ExecutorLogLevelEnv = "EXECUTOR_LOGGER_LEVEL"
+	
+	// NetworkingModeEnv specifies the networking mode (cilium, calico, etc.)
+	NetworkingModeEnv = "NETWORKING_MODE"
+	
+	// ServiceMeshEnabledEnv indicates whether service mesh features are enabled
+	ServiceMeshEnabledEnv = "SERVICE_MESH_ENABLED"
+	
+	// NetworkPolicyModeEnv specifies how network policies should be handled
+	NetworkPolicyModeEnv = "NETWORK_POLICY_MODE"
+	
+	// VMDefaultResourcesEnv specifies default resources for VM workloads
+	VMDefaultResourcesEnv = "VM_DEFAULT_RESOURCES"
+	
+	// VMStorageClassEnv specifies the storage class for VM disks
+	VMStorageClassEnv = "VM_STORAGE_CLASS"
+	
+	// VirtIOEnabledEnv indicates whether VirtIO devices are enabled for VMs
+	VirtIOEnabledEnv = "VIRTIO_ENABLED"
+	
+	// HubbleEnabledEnv indicates whether Hubble observability is enabled
+	HubbleEnabledEnv = "HUBBLE_ENABLED"
+	
+	// WorkloadClassifierModeEnv specifies how workload classification should work
+	WorkloadClassifierModeEnv = "WORKLOAD_CLASSIFIER_MODE"
+)
