@@ -217,6 +217,18 @@ devspace run test-connectivity
 5. **Documentation**: Living documentation
 6. **Review**: Code review and optimization
 
+#### Task Management Requirements
+**CRITICAL**: The `TODO.md` file must be kept up to date throughout development:
+
+- **Real-time Updates**: Mark tasks as completed immediately upon finishing
+- **Progress Tracking**: Update phase status and completion percentages
+- **Dependencies**: Ensure accurate dependency tracking between phases
+- **Timeline Updates**: Adjust timeline estimates based on actual progress
+- **New Tasks**: Add newly discovered tasks as they emerge during implementation
+- **Status Changes**: Move tasks between pending, in_progress, and completed states
+
+This ensures accurate project tracking and enables proper planning for subsequent development phases.
+
 ### 📈 Success Metrics
 
 #### Technical Metrics
