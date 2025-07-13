@@ -64,10 +64,19 @@ create_kind_cluster() {
     # Create new cluster with custom configuration
     kind create cluster --config ".develop/kind-cluster-native.yml" --name "${CLUSTER_NAME}"
     
-    # Set kubectl context
-    kubectl cluster-info --context "kind-${CLUSTER_NAME}"
+    # Export kubeconfig to a dedicated file
+    local kubeconfig_file=".develop/kubeconfig-${CLUSTER_NAME}"
+    kind get kubeconfig --name "${CLUSTER_NAME}" > "${kubeconfig_file}"
+    
+    # Set KUBECONFIG environment variable
+    export KUBECONFIG="${PWD}/${kubeconfig_file}"
+    
+    # Verify cluster access
+    kubectl cluster-info
     
     log "Kind cluster created successfully"
+    log "Kubeconfig exported to: ${PWD}/${kubeconfig_file}"
+    log "KUBECONFIG environment variable set"
 }
 
 install_cilium() {
@@ -268,6 +277,11 @@ verify_installation() {
 print_next_steps() {
     log "🎉 Native architecture development environment setup complete!"
     echo ""
+    echo -e "${BLUE}Important - Kubeconfig Setup:${NC}"
+    echo "The cluster kubeconfig is available at: ${PWD}/.develop/kubeconfig-${CLUSTER_NAME}"
+    echo "To use this cluster in new terminal sessions, run:"
+    echo -e "${YELLOW}export KUBECONFIG=${PWD}/.develop/kubeconfig-${CLUSTER_NAME}${NC}"
+    echo ""
     echo -e "${BLUE}Next steps:${NC}"
     echo "1. Run 'kubectl get nodes' to verify cluster status"
     echo "2. Run 'kubectl get pods -A' to see all running pods"
@@ -279,6 +293,9 @@ print_next_steps() {
     echo "- View KubeVirt status: kubectl get pods -n kubevirt"
     echo "- Test networking: kubectl exec -it network-test -n clabernetes-test -- ping 8.8.8.8"
     echo "- Delete cluster: kind delete cluster --name ${CLUSTER_NAME}"
+    echo ""
+    echo -e "${BLUE}Environment restoration:${NC}"
+    echo "- To restore your original kubeconfig: unset KUBECONFIG"
 }
 
 main() {

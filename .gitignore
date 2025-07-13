@@ -18,6 +18,9 @@
 .DS_Store
 */.DS_Store
 
+# Development environment kubeconfig files
+.develop/kubeconfig-*
+
 # private dir for notes and such
 private/
 .private/
