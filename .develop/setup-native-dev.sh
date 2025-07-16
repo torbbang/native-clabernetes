@@ -44,9 +44,30 @@ check_prerequisites() {
         error "helm is not installed. Please install helm first"
     fi
     
+    # Check if jq is installed
+    if ! command -v jq &> /dev/null; then
+        error "jq is not installed. Please install jq first"
+    fi
+    
     # Check if Docker is running
     if ! docker info &> /dev/null; then
         error "Docker is not running. Please start Docker first"
+    fi
+    
+    # Check inotify limits for KubeVirt
+    local max_watches=$(sysctl -n fs.inotify.max_user_watches 2>/dev/null || echo "0")
+    local max_instances=$(sysctl -n fs.inotify.max_user_instances 2>/dev/null || echo "0")
+    
+    if [[ $max_watches -lt 524288 ]] || [[ $max_instances -lt 512 ]]; then
+        warn "inotify limits are too low for KubeVirt (current: watches=$max_watches, instances=$max_instances)"
+        warn "KubeVirt may fail with 'too many open files' errors"
+        warn "Please increase limits on the host system:"
+        warn "  echo 'fs.inotify.max_user_watches=524288' | sudo tee -a /etc/sysctl.conf"
+        warn "  echo 'fs.inotify.max_user_instances=512' | sudo tee -a /etc/sysctl.conf"
+        warn "  sudo sysctl -p"
+        warn ""
+        warn "NOTE: Future iterations of the dev environment may use minikube instead of kind"
+        warn "      as it provides better support for virtualization workloads like KubeVirt"
     fi
     
     log "All prerequisites satisfied"
@@ -80,40 +101,59 @@ create_kind_cluster() {
 }
 
 install_cilium() {
-    log "Installing Cilium CNI..."
+    log "Installing Cilium CNI with Helm..."
     
     # Add Cilium Helm repository
+    log "Adding Cilium Helm repository..."
     helm repo add cilium https://helm.cilium.io/
     helm repo update
     
-    # Install Cilium with configuration for kind
-    helm install cilium cilium/cilium \
+    # Check if Cilium is already installed
+    if helm list -n kube-system | grep -q cilium; then
+        log "Cilium is already installed, skipping installation"
+        return 0
+    fi
+    
+    # Install Cilium with configuration optimized for kind
+    log "Installing Cilium ${CILIUM_VERSION}..."
+    helm upgrade --install cilium cilium/cilium \
         --version="${CILIUM_VERSION}" \
         --namespace=kube-system \
+        --set kubeProxyReplacement=true \
+        --set k8sServiceHost=${CLUSTER_NAME}-control-plane \
+        --set k8sServicePort=6443 \
+        --set hostServices.enabled=false \
+        --set externalIPs.enabled=true \
+        --set nodePort.enabled=true \
+        --set hostPort.enabled=true \
         --set image.pullPolicy=IfNotPresent \
         --set ipam.mode=kubernetes \
-        --set kubeProxyReplacement=false \
-        --set k8sServiceHost=clabernetes-native-control-plane \
-        --set k8sServicePort=6443 \
+        --set routingMode=native \
+        --set ipv4NativeRoutingCIDR=10.244.0.0/16 \
+        --set autoDirectNodeRoutes=true \
         --set hubble.enabled=true \
-        --set hubble.metrics.enabled="{dns,drop,tcp,flow,port-distribution,icmp,httpV2:exemplars=true;labelsContext=source_ip,source_namespace,source_workload,destination_ip,destination_namespace,destination_workload,traffic_direction}" \
         --set hubble.relay.enabled=true \
         --set hubble.ui.enabled=true \
-        --set prometheus.enabled=true \
-        --set operator.prometheus.enabled=true \
-        --set hubble.metrics.enableOpenMetrics=true
+        --set operator.replicas=1 \
+        --set nodeinit.enabled=true \
+        --wait \
+        --timeout=15m
     
     # Wait for Cilium to be ready
-    log "Waiting for Cilium to be ready..."
-    kubectl wait --for=condition=ready pod -l k8s-app=cilium -n kube-system --timeout=300s
-    kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=cilium-operator -n kube-system --timeout=300s
+    log "Waiting for Cilium pods to be ready..."
+    kubectl wait --for=condition=ready pod -l k8s-app=cilium -n kube-system --timeout=600s
+    kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=cilium-operator -n kube-system --timeout=600s
     
     # Verify Cilium installation
     if kubectl get pods -n kube-system -l k8s-app=cilium --no-headers | grep -v Running; then
         error "Cilium pods are not running properly"
     fi
     
-    log "Cilium installed and running successfully"
+    # Check node readiness
+    log "Checking node readiness..."
+    kubectl get nodes
+    
+    log "Cilium installed and running successfully with Helm"
 }
 
 install_kubevirt() {
@@ -169,7 +209,11 @@ install_cdi() {
     kubectl apply -f "https://github.com/kubevirt/containerized-data-importer/releases/download/${CDI_VERSION}/cdi-cr.yaml"
     
     # Wait for CDI to be ready
-    kubectl wait --for=condition=ready pod -l app=cdi-operator -n cdi --timeout=300s
+    log "Waiting for CDI operator to be ready..."
+    kubectl wait --for=condition=Available cdi cdi -n cdi --timeout=300s || {
+        log "CDI CR not available yet, waiting for operator pods..."
+        kubectl wait --for=condition=ready pod -l name=cdi-operator -n cdi --timeout=300s
+    }
     
     log "CDI installed successfully"
 }
