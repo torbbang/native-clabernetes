@@ -1,8 +1,7 @@
 package v1alpha1
 
 // PointToPointTunnel holds information necessary for creating a tunnel between two interfaces on
-// different nodes of a clabernetes Topology. This connection can be established by using clab tools
-// (vxlan) or the experimental slurpeeth (tcp tunnel magic).
+// different nodes of a clabernetes Topology. This connection is established using VXLAN tunnels.
 type PointToPointTunnel struct {
 	// TunnelID is the id number of the tunnel (vnid or segment id).
 	TunnelID int `json:"tunnelID"`

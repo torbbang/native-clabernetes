@@ -1,6 +1,0 @@
-dependencies:
-- name: clicker
-  repository: ""
-  version: 0.0.0
-digest: sha256:bd5737c139eb355d2d186d1de870d2c49feb1656b277f76df95116cbab811094
-generated: "2023-10-23T17:12:54.554048-07:00"

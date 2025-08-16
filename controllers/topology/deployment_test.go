@@ -618,7 +618,7 @@ func TestRenderDeployment(t *testing.T) {
 					Namespace: "clabernetes",
 				},
 				Spec: clabernetesapisv1alpha1.TopologySpec{
-					Connectivity: clabernetesconstants.ConnectivitySlurpeeth,
+					Connectivity: clabernetesconstants.ConnectivityVXLAN,
 					Definition: clabernetesapisv1alpha1.Definition{
 						Containerlab: `---
 		   name: test

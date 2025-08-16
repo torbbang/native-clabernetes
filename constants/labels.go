@@ -22,7 +22,7 @@ const (
 	LabelTopologyNode = "clabernetes/topologyNode"
 
 	// LabelTopologyKind is the label indicating the resource *kind* the object is associated with.
-	// For example, a "containerlab" kind, or a "kne" kind.
+	// For example, a "containerlab" kind.
 	LabelTopologyKind = "clabernetes/topologyKind"
 
 	// LabelTopologyServiceType is a label that identifies what flavor of service a given service
@@ -40,14 +40,6 @@ const (
 	// type -- this indicates that this service is of the type that is used for exposing ports on
 	// a containerlab node via a LoadBalancer service.
 	TopologyServiceTypeExpose = "expose"
-)
-
-const (
-	// LabelClickerNodeConfigured is a label that is set on nodes that have been tickled via the
-	// clabernetes clicker tool -- the value is the unix timestamp that the node was tickled.
-	LabelClickerNodeConfigured = "clabernetes/clickerNodeConfigured"
-	// LabelClickerNodeTarget is the target node for the clicker job.
-	LabelClickerNodeTarget = "clabernetes/clickerNodeTarget"
 )
 
 const (

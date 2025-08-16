@@ -16,7 +16,6 @@ vars:
   MANAGER_IMAGE: ${REGISTRY}/${CLABERNETES}-manager
   MANAGER_DEV_IMAGE: ${MANAGER_IMAGE}-dev
   LAUNCHER_IMAGE: ${REGISTRY}/${CLABERNETES}-launcher
-  UI_IMAGE: ${REGISTRY}/${CLABERNETES}-ui
   CLABVERTER_IMAGE: ${REGISTRY}/clabverter
 
   # always build w/ 0.0.0 -- overridden for actual releases by release profile. for "normal" builds
@@ -71,18 +70,6 @@ images:
       - dev-latest
       - ${COMMIT_HASH}
 
-  clabernetes-ui:
-    createPullSecret: false
-    image: ${UI_IMAGE}
-    context: ../ui/
-    dockerfile: ../build/ui.Dockerfile
-    rebuildStrategy: ignoreContextChanges
-    buildArgs:
-      VERSION: ${VERSION}-${COMMIT_HASH}
-    buildKit: {}
-    tags:
-      - dev-latest
-      - ${COMMIT_HASH}
 
   clabverter:
     createPullSecret: false
@@ -106,9 +93,6 @@ deployments:
       values:
         manager:
           image: ${MANAGER_IMAGE}
-          imagePullPolicy: ${PULL_POLICY}
-        ui:
-          image: ${UI_IMAGE}
           imagePullPolicy: ${PULL_POLICY}
         globalConfig:
           deployment:
@@ -163,11 +147,6 @@ profiles:
         path: deployments.clabernetes.helm.values.manager.replicaCount
         value: 1
 
-  - name: single-ui
-    patches:
-      - op: add
-        path: deployments.clabernetes.helm.values.ui.replicaCount
-        value: 1
 
   # for development using devspace on "non-local" clusters (meaning *not* kind/docker-desktop/
   # minikube/maybe others) you will want to have Always for image pull so launcher and clicker pick
@@ -208,15 +187,6 @@ profiles:
         path: images.clabernetes-launcher.buildArgs.VERSION
         value: ${RELEASE_VERSION}
 
-      - op: replace
-        path: images.clabernetes-ui.tags
-        value:
-          - latest
-          - ${RELEASE_VERSION}
-          - ${COMMIT_HASH}
-      - op: replace
-        path: images.clabernetes-ui.buildArgs.VERSION
-        value: ${RELEASE_VERSION}
 
       - op: replace
         path: images.clabverter.tags
@@ -248,13 +218,6 @@ profiles:
         path: images.clabernetes-launcher.buildArgs.VERSION
         value: ${RELEASE_VERSION}
 
-      - op: replace
-        path: images.clabernetes-ui.tags
-        value:
-          - ${RELEASE_VERSION}
-      - op: replace
-        path: images.clabernetes-ui.buildArgs.VERSION
-        value: ${RELEASE_VERSION}
 
       - op: replace
         path: images.clabverter.tags
@@ -268,12 +231,12 @@ pipelines:
   build:
     # override the default build pipeline so we don't bother building dev image in ci
     run: |
-      build_images clabernetes clabernetes-launcher clabernetes-ui clabverter
+      build_images clabernetes clabernetes-launcher clabverter
 
   dev:
     # override the default dev pipeline to not bother building clabverter while doing dev things
     run: |
-      build_images clabernetes-dev clabernetes clabernetes-launcher clabernetes-ui
+      build_images clabernetes-dev clabernetes clabernetes-launcher
       create_deployments --all
       start_dev --all
 
@@ -282,7 +245,7 @@ pipelines:
     # deploy pipeline
     run: |
       run_dependencies --all
-      build_images clabernetes clabernetes-launcher clabernetes-ui
+      build_images clabernetes clabernetes-launcher
       create_deployments --all
 
   purge:

@@ -28,117 +28,45 @@ import (
 
 func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenAPIDefinition {
 	return map[string]common.OpenAPIDefinition{
-		"github.com/srl-labs/clabernetes/apis/v1alpha1.Config": schema_srl_labs_clabernetes_apis_v1alpha1_Config(
-			ref,
-		),
-		"github.com/srl-labs/clabernetes/apis/v1alpha1.ConfigDeployment": schema_srl_labs_clabernetes_apis_v1alpha1_ConfigDeployment(
-			ref,
-		),
-		"github.com/srl-labs/clabernetes/apis/v1alpha1.ConfigImagePull": schema_srl_labs_clabernetes_apis_v1alpha1_ConfigImagePull(
-			ref,
-		),
-		"github.com/srl-labs/clabernetes/apis/v1alpha1.ConfigList": schema_srl_labs_clabernetes_apis_v1alpha1_ConfigList(
-			ref,
-		),
-		"github.com/srl-labs/clabernetes/apis/v1alpha1.ConfigMetadata": schema_srl_labs_clabernetes_apis_v1alpha1_ConfigMetadata(
-			ref,
-		),
-		"github.com/srl-labs/clabernetes/apis/v1alpha1.ConfigSpec": schema_srl_labs_clabernetes_apis_v1alpha1_ConfigSpec(
-			ref,
-		),
-		"github.com/srl-labs/clabernetes/apis/v1alpha1.ConfigStatus": schema_srl_labs_clabernetes_apis_v1alpha1_ConfigStatus(
-			ref,
-		),
-		"github.com/srl-labs/clabernetes/apis/v1alpha1.Connectivity": schema_srl_labs_clabernetes_apis_v1alpha1_Connectivity(
-			ref,
-		),
-		"github.com/srl-labs/clabernetes/apis/v1alpha1.ConnectivityList": schema_srl_labs_clabernetes_apis_v1alpha1_ConnectivityList(
-			ref,
-		),
-		"github.com/srl-labs/clabernetes/apis/v1alpha1.ConnectivitySpec": schema_srl_labs_clabernetes_apis_v1alpha1_ConnectivitySpec(
-			ref,
-		),
-		"github.com/srl-labs/clabernetes/apis/v1alpha1.ConnectivityStatus": schema_srl_labs_clabernetes_apis_v1alpha1_ConnectivityStatus(
-			ref,
-		),
-		"github.com/srl-labs/clabernetes/apis/v1alpha1.Definition": schema_srl_labs_clabernetes_apis_v1alpha1_Definition(
-			ref,
-		),
-		"github.com/srl-labs/clabernetes/apis/v1alpha1.Deployment": schema_srl_labs_clabernetes_apis_v1alpha1_Deployment(
-			ref,
-		),
-		"github.com/srl-labs/clabernetes/apis/v1alpha1.Expose": schema_srl_labs_clabernetes_apis_v1alpha1_Expose(
-			ref,
-		),
-		"github.com/srl-labs/clabernetes/apis/v1alpha1.ExposedPorts": schema_srl_labs_clabernetes_apis_v1alpha1_ExposedPorts(
-			ref,
-		),
-		"github.com/srl-labs/clabernetes/apis/v1alpha1.FileFromConfigMap": schema_srl_labs_clabernetes_apis_v1alpha1_FileFromConfigMap(
-			ref,
-		),
-		"github.com/srl-labs/clabernetes/apis/v1alpha1.FileFromURL": schema_srl_labs_clabernetes_apis_v1alpha1_FileFromURL(
-			ref,
-		),
-		"github.com/srl-labs/clabernetes/apis/v1alpha1.ImagePull": schema_srl_labs_clabernetes_apis_v1alpha1_ImagePull(
-			ref,
-		),
-		"github.com/srl-labs/clabernetes/apis/v1alpha1.ImageRequest": schema_srl_labs_clabernetes_apis_v1alpha1_ImageRequest(
-			ref,
-		),
-		"github.com/srl-labs/clabernetes/apis/v1alpha1.ImageRequestList": schema_srl_labs_clabernetes_apis_v1alpha1_ImageRequestList(
-			ref,
-		),
-		"github.com/srl-labs/clabernetes/apis/v1alpha1.ImageRequestSpec": schema_srl_labs_clabernetes_apis_v1alpha1_ImageRequestSpec(
-			ref,
-		),
-		"github.com/srl-labs/clabernetes/apis/v1alpha1.ImageRequestStatus": schema_srl_labs_clabernetes_apis_v1alpha1_ImageRequestStatus(
-			ref,
-		),
-		"github.com/srl-labs/clabernetes/apis/v1alpha1.LinkEndpoint": schema_srl_labs_clabernetes_apis_v1alpha1_LinkEndpoint(
-			ref,
-		),
-		"github.com/srl-labs/clabernetes/apis/v1alpha1.Persistence": schema_srl_labs_clabernetes_apis_v1alpha1_Persistence(
-			ref,
-		),
-		"github.com/srl-labs/clabernetes/apis/v1alpha1.PointToPointTunnel": schema_srl_labs_clabernetes_apis_v1alpha1_PointToPointTunnel(
-			ref,
-		),
-		"github.com/srl-labs/clabernetes/apis/v1alpha1.ProbeConfiguration": schema_srl_labs_clabernetes_apis_v1alpha1_ProbeConfiguration(
-			ref,
-		),
-		"github.com/srl-labs/clabernetes/apis/v1alpha1.ReconcileHashes": schema_srl_labs_clabernetes_apis_v1alpha1_ReconcileHashes(
-			ref,
-		),
-		"github.com/srl-labs/clabernetes/apis/v1alpha1.SSHProbeConfiguration": schema_srl_labs_clabernetes_apis_v1alpha1_SSHProbeConfiguration(
-			ref,
-		),
-		"github.com/srl-labs/clabernetes/apis/v1alpha1.Scheduling": schema_srl_labs_clabernetes_apis_v1alpha1_Scheduling(
-			ref,
-		),
-		"github.com/srl-labs/clabernetes/apis/v1alpha1.StatusProbes": schema_srl_labs_clabernetes_apis_v1alpha1_StatusProbes(
-			ref,
-		),
-		"github.com/srl-labs/clabernetes/apis/v1alpha1.TCPProbeConfiguration": schema_srl_labs_clabernetes_apis_v1alpha1_TCPProbeConfiguration(
-			ref,
-		),
-		"github.com/srl-labs/clabernetes/apis/v1alpha1.Topology": schema_srl_labs_clabernetes_apis_v1alpha1_Topology(
-			ref,
-		),
-		"github.com/srl-labs/clabernetes/apis/v1alpha1.TopologyList": schema_srl_labs_clabernetes_apis_v1alpha1_TopologyList(
-			ref,
-		),
-		"github.com/srl-labs/clabernetes/apis/v1alpha1.TopologySpec": schema_srl_labs_clabernetes_apis_v1alpha1_TopologySpec(
-			ref,
-		),
-		"github.com/srl-labs/clabernetes/apis/v1alpha1.TopologyStatus": schema_srl_labs_clabernetes_apis_v1alpha1_TopologyStatus(
-			ref,
-		),
+		"github.com/srl-labs/clabernetes/apis/v1alpha1.Config":                schema_srl_labs_clabernetes_apis_v1alpha1_Config(ref),
+		"github.com/srl-labs/clabernetes/apis/v1alpha1.ConfigDeployment":      schema_srl_labs_clabernetes_apis_v1alpha1_ConfigDeployment(ref),
+		"github.com/srl-labs/clabernetes/apis/v1alpha1.ConfigImagePull":       schema_srl_labs_clabernetes_apis_v1alpha1_ConfigImagePull(ref),
+		"github.com/srl-labs/clabernetes/apis/v1alpha1.ConfigList":            schema_srl_labs_clabernetes_apis_v1alpha1_ConfigList(ref),
+		"github.com/srl-labs/clabernetes/apis/v1alpha1.ConfigMetadata":        schema_srl_labs_clabernetes_apis_v1alpha1_ConfigMetadata(ref),
+		"github.com/srl-labs/clabernetes/apis/v1alpha1.ConfigSpec":            schema_srl_labs_clabernetes_apis_v1alpha1_ConfigSpec(ref),
+		"github.com/srl-labs/clabernetes/apis/v1alpha1.ConfigStatus":          schema_srl_labs_clabernetes_apis_v1alpha1_ConfigStatus(ref),
+		"github.com/srl-labs/clabernetes/apis/v1alpha1.Connectivity":          schema_srl_labs_clabernetes_apis_v1alpha1_Connectivity(ref),
+		"github.com/srl-labs/clabernetes/apis/v1alpha1.ConnectivityList":      schema_srl_labs_clabernetes_apis_v1alpha1_ConnectivityList(ref),
+		"github.com/srl-labs/clabernetes/apis/v1alpha1.ConnectivitySpec":      schema_srl_labs_clabernetes_apis_v1alpha1_ConnectivitySpec(ref),
+		"github.com/srl-labs/clabernetes/apis/v1alpha1.ConnectivityStatus":    schema_srl_labs_clabernetes_apis_v1alpha1_ConnectivityStatus(ref),
+		"github.com/srl-labs/clabernetes/apis/v1alpha1.Definition":            schema_srl_labs_clabernetes_apis_v1alpha1_Definition(ref),
+		"github.com/srl-labs/clabernetes/apis/v1alpha1.Deployment":            schema_srl_labs_clabernetes_apis_v1alpha1_Deployment(ref),
+		"github.com/srl-labs/clabernetes/apis/v1alpha1.Expose":                schema_srl_labs_clabernetes_apis_v1alpha1_Expose(ref),
+		"github.com/srl-labs/clabernetes/apis/v1alpha1.ExposedPorts":          schema_srl_labs_clabernetes_apis_v1alpha1_ExposedPorts(ref),
+		"github.com/srl-labs/clabernetes/apis/v1alpha1.FileFromConfigMap":     schema_srl_labs_clabernetes_apis_v1alpha1_FileFromConfigMap(ref),
+		"github.com/srl-labs/clabernetes/apis/v1alpha1.FileFromURL":           schema_srl_labs_clabernetes_apis_v1alpha1_FileFromURL(ref),
+		"github.com/srl-labs/clabernetes/apis/v1alpha1.ImagePull":             schema_srl_labs_clabernetes_apis_v1alpha1_ImagePull(ref),
+		"github.com/srl-labs/clabernetes/apis/v1alpha1.ImageRequest":          schema_srl_labs_clabernetes_apis_v1alpha1_ImageRequest(ref),
+		"github.com/srl-labs/clabernetes/apis/v1alpha1.ImageRequestList":      schema_srl_labs_clabernetes_apis_v1alpha1_ImageRequestList(ref),
+		"github.com/srl-labs/clabernetes/apis/v1alpha1.ImageRequestSpec":      schema_srl_labs_clabernetes_apis_v1alpha1_ImageRequestSpec(ref),
+		"github.com/srl-labs/clabernetes/apis/v1alpha1.ImageRequestStatus":    schema_srl_labs_clabernetes_apis_v1alpha1_ImageRequestStatus(ref),
+		"github.com/srl-labs/clabernetes/apis/v1alpha1.LinkEndpoint":          schema_srl_labs_clabernetes_apis_v1alpha1_LinkEndpoint(ref),
+		"github.com/srl-labs/clabernetes/apis/v1alpha1.Persistence":           schema_srl_labs_clabernetes_apis_v1alpha1_Persistence(ref),
+		"github.com/srl-labs/clabernetes/apis/v1alpha1.PointToPointTunnel":    schema_srl_labs_clabernetes_apis_v1alpha1_PointToPointTunnel(ref),
+		"github.com/srl-labs/clabernetes/apis/v1alpha1.ProbeConfiguration":    schema_srl_labs_clabernetes_apis_v1alpha1_ProbeConfiguration(ref),
+		"github.com/srl-labs/clabernetes/apis/v1alpha1.ReconcileHashes":       schema_srl_labs_clabernetes_apis_v1alpha1_ReconcileHashes(ref),
+		"github.com/srl-labs/clabernetes/apis/v1alpha1.SSHProbeConfiguration": schema_srl_labs_clabernetes_apis_v1alpha1_SSHProbeConfiguration(ref),
+		"github.com/srl-labs/clabernetes/apis/v1alpha1.Scheduling":            schema_srl_labs_clabernetes_apis_v1alpha1_Scheduling(ref),
+		"github.com/srl-labs/clabernetes/apis/v1alpha1.StatusProbes":          schema_srl_labs_clabernetes_apis_v1alpha1_StatusProbes(ref),
+		"github.com/srl-labs/clabernetes/apis/v1alpha1.TCPProbeConfiguration": schema_srl_labs_clabernetes_apis_v1alpha1_TCPProbeConfiguration(ref),
+		"github.com/srl-labs/clabernetes/apis/v1alpha1.Topology":              schema_srl_labs_clabernetes_apis_v1alpha1_Topology(ref),
+		"github.com/srl-labs/clabernetes/apis/v1alpha1.TopologyList":          schema_srl_labs_clabernetes_apis_v1alpha1_TopologyList(ref),
+		"github.com/srl-labs/clabernetes/apis/v1alpha1.TopologySpec":          schema_srl_labs_clabernetes_apis_v1alpha1_TopologySpec(ref),
+		"github.com/srl-labs/clabernetes/apis/v1alpha1.TopologyStatus":        schema_srl_labs_clabernetes_apis_v1alpha1_TopologyStatus(ref),
 	}
 }
 
-func schema_srl_labs_clabernetes_apis_v1alpha1_Config(
-	ref common.ReferenceCallback,
-) common.OpenAPIDefinition {
+func schema_srl_labs_clabernetes_apis_v1alpha1_Config(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -168,17 +96,13 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_Config(
 					"spec": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref: ref(
-								"github.com/srl-labs/clabernetes/apis/v1alpha1.ConfigSpec",
-							),
+							Ref:     ref("github.com/srl-labs/clabernetes/apis/v1alpha1.ConfigSpec"),
 						},
 					},
 					"status": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref: ref(
-								"github.com/srl-labs/clabernetes/apis/v1alpha1.ConfigStatus",
-							),
+							Ref:     ref("github.com/srl-labs/clabernetes/apis/v1alpha1.ConfigStatus"),
 						},
 					},
 				},
@@ -189,9 +113,7 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_Config(
 	}
 }
 
-func schema_srl_labs_clabernetes_apis_v1alpha1_ConfigDeployment(
-	ref common.ReferenceCallback,
-) common.OpenAPIDefinition {
+func schema_srl_labs_clabernetes_apis_v1alpha1_ConfigDeployment(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -217,9 +139,31 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_ConfigDeployment(
 											Allows: true,
 											Schema: &spec.Schema{
 												SchemaProps: spec.SchemaProps{
-													Ref: ref(
-														"k8s.io/api/core/v1.ResourceRequirements",
-													),
+													Ref: ref("k8s.io/api/core/v1.ResourceRequirements"),
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+					"nodeSelectorsByImage": {
+						SchemaProps: spec.SchemaProps{
+							Description: "NodeSelectorsByImage is a mapping of image glob pattern as key and node selectors (value) to apply to each deployment. Note that in case of multiple matches, the longest (with most characters) will take precedence. A config example: {\n  \"internal.io/nokia_sros*\": {\"node-flavour\": \"baremetal\"},\n  \"ghcr.io/nokia/srlinux*\":  {\"node-flavour\": \"amd64\"},\n  \"default\":                 {\"node-flavour\": \"cheap\"},\n}.",
+							Type:        []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Type: []string{"object"},
+										AdditionalProperties: &spec.SchemaOrBool{
+											Allows: true,
+											Schema: &spec.Schema{
+												SchemaProps: spec.SchemaProps{
+													Default: "",
+													Type:    []string{"string"},
+													Format:  "",
 												},
 											},
 										},
@@ -310,9 +254,7 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_ConfigDeployment(
 	}
 }
 
-func schema_srl_labs_clabernetes_apis_v1alpha1_ConfigImagePull(
-	ref common.ReferenceCallback,
-) common.OpenAPIDefinition {
+func schema_srl_labs_clabernetes_apis_v1alpha1_ConfigImagePull(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -360,9 +302,7 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_ConfigImagePull(
 	}
 }
 
-func schema_srl_labs_clabernetes_apis_v1alpha1_ConfigList(
-	ref common.ReferenceCallback,
-) common.OpenAPIDefinition {
+func schema_srl_labs_clabernetes_apis_v1alpha1_ConfigList(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -396,9 +336,7 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_ConfigList(
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref: ref(
-											"github.com/srl-labs/clabernetes/apis/v1alpha1.Config",
-										),
+										Ref:     ref("github.com/srl-labs/clabernetes/apis/v1alpha1.Config"),
 									},
 								},
 							},
@@ -413,9 +351,7 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_ConfigList(
 	}
 }
 
-func schema_srl_labs_clabernetes_apis_v1alpha1_ConfigMetadata(
-	ref common.ReferenceCallback,
-) common.OpenAPIDefinition {
+func schema_srl_labs_clabernetes_apis_v1alpha1_ConfigMetadata(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -460,9 +396,7 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_ConfigMetadata(
 	}
 }
 
-func schema_srl_labs_clabernetes_apis_v1alpha1_ConfigSpec(
-	ref common.ReferenceCallback,
-) common.OpenAPIDefinition {
+func schema_srl_labs_clabernetes_apis_v1alpha1_ConfigSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -473,9 +407,7 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_ConfigSpec(
 						SchemaProps: spec.SchemaProps{
 							Description: "Metadata holds \"global\" metadata -- that is, metadata that is applied to all objects created by the clabernetes controller.",
 							Default:     map[string]interface{}{},
-							Ref: ref(
-								"github.com/srl-labs/clabernetes/apis/v1alpha1.ConfigMetadata",
-							),
+							Ref:         ref("github.com/srl-labs/clabernetes/apis/v1alpha1.ConfigMetadata"),
 						},
 					},
 					"inClusterDNSSuffix": {
@@ -489,18 +421,14 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_ConfigSpec(
 						SchemaProps: spec.SchemaProps{
 							Description: "ImagePull holds configurations relevant to how clabernetes launcher pods handle pulling images.",
 							Default:     map[string]interface{}{},
-							Ref: ref(
-								"github.com/srl-labs/clabernetes/apis/v1alpha1.ConfigImagePull",
-							),
+							Ref:         ref("github.com/srl-labs/clabernetes/apis/v1alpha1.ConfigImagePull"),
 						},
 					},
 					"deployment": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Deployment holds clabernetes deployment related configuration settings.",
 							Default:     map[string]interface{}{},
-							Ref: ref(
-								"github.com/srl-labs/clabernetes/apis/v1alpha1.ConfigDeployment",
-							),
+							Ref:         ref("github.com/srl-labs/clabernetes/apis/v1alpha1.ConfigDeployment"),
 						},
 					},
 					"naming": {
@@ -519,9 +447,7 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_ConfigSpec(
 	}
 }
 
-func schema_srl_labs_clabernetes_apis_v1alpha1_ConfigStatus(
-	ref common.ReferenceCallback,
-) common.OpenAPIDefinition {
+func schema_srl_labs_clabernetes_apis_v1alpha1_ConfigStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -532,9 +458,7 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_ConfigStatus(
 	}
 }
 
-func schema_srl_labs_clabernetes_apis_v1alpha1_Connectivity(
-	ref common.ReferenceCallback,
-) common.OpenAPIDefinition {
+func schema_srl_labs_clabernetes_apis_v1alpha1_Connectivity(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -564,17 +488,13 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_Connectivity(
 					"spec": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref: ref(
-								"github.com/srl-labs/clabernetes/apis/v1alpha1.ConnectivitySpec",
-							),
+							Ref:     ref("github.com/srl-labs/clabernetes/apis/v1alpha1.ConnectivitySpec"),
 						},
 					},
 					"status": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref: ref(
-								"github.com/srl-labs/clabernetes/apis/v1alpha1.ConnectivityStatus",
-							),
+							Ref:     ref("github.com/srl-labs/clabernetes/apis/v1alpha1.ConnectivityStatus"),
 						},
 					},
 				},
@@ -585,9 +505,7 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_Connectivity(
 	}
 }
 
-func schema_srl_labs_clabernetes_apis_v1alpha1_ConnectivityList(
-	ref common.ReferenceCallback,
-) common.OpenAPIDefinition {
+func schema_srl_labs_clabernetes_apis_v1alpha1_ConnectivityList(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -621,9 +539,7 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_ConnectivityList(
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref: ref(
-											"github.com/srl-labs/clabernetes/apis/v1alpha1.Connectivity",
-										),
+										Ref:     ref("github.com/srl-labs/clabernetes/apis/v1alpha1.Connectivity"),
 									},
 								},
 							},
@@ -638,9 +554,7 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_ConnectivityList(
 	}
 }
 
-func schema_srl_labs_clabernetes_apis_v1alpha1_ConnectivitySpec(
-	ref common.ReferenceCallback,
-) common.OpenAPIDefinition {
+func schema_srl_labs_clabernetes_apis_v1alpha1_ConnectivitySpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -659,9 +573,7 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_ConnectivitySpec(
 										Items: &spec.SchemaOrArray{
 											Schema: &spec.Schema{
 												SchemaProps: spec.SchemaProps{
-													Ref: ref(
-														"github.com/srl-labs/clabernetes/apis/v1alpha1.PointToPointTunnel",
-													),
+													Ref: ref("github.com/srl-labs/clabernetes/apis/v1alpha1.PointToPointTunnel"),
 												},
 											},
 										},
@@ -679,9 +591,7 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_ConnectivitySpec(
 	}
 }
 
-func schema_srl_labs_clabernetes_apis_v1alpha1_ConnectivityStatus(
-	ref common.ReferenceCallback,
-) common.OpenAPIDefinition {
+func schema_srl_labs_clabernetes_apis_v1alpha1_ConnectivityStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -692,25 +602,16 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_ConnectivityStatus(
 	}
 }
 
-func schema_srl_labs_clabernetes_apis_v1alpha1_Definition(
-	ref common.ReferenceCallback,
-) common.OpenAPIDefinition {
+func schema_srl_labs_clabernetes_apis_v1alpha1_Definition(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
-				Description: "Definition holds the underlying topology definition for the Topology CR. A Topology *must* have one -- and only one -- definition type defined.",
+				Description: "Definition holds the underlying topology definition for the Topology CR. A Topology *must* have a containerlab definition.",
 				Type:        []string{"object"},
 				Properties: map[string]spec.Schema{
 					"containerlab": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Containerlab holds a valid containerlab topology.",
-							Type:        []string{"string"},
-							Format:      "",
-						},
-					},
-					"kne": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Kne holds a valid kne topology.",
 							Type:        []string{"string"},
 							Format:      "",
 						},
@@ -721,9 +622,7 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_Definition(
 	}
 }
 
-func schema_srl_labs_clabernetes_apis_v1alpha1_Deployment(
-	ref common.ReferenceCallback,
-) common.OpenAPIDefinition {
+func schema_srl_labs_clabernetes_apis_v1alpha1_Deployment(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -749,9 +648,7 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_Deployment(
 						SchemaProps: spec.SchemaProps{
 							Description: "Scheduling holds information about how the launcher pod(s) should be configured with respect to \"scheduling\" things (affinity/node selector/tolerations).",
 							Default:     map[string]interface{}{},
-							Ref: ref(
-								"github.com/srl-labs/clabernetes/apis/v1alpha1.Scheduling",
-							),
+							Ref:         ref("github.com/srl-labs/clabernetes/apis/v1alpha1.Scheduling"),
 						},
 					},
 					"privilegedLauncher": {
@@ -774,9 +671,7 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_Deployment(
 											Schema: &spec.Schema{
 												SchemaProps: spec.SchemaProps{
 													Default: map[string]interface{}{},
-													Ref: ref(
-														"github.com/srl-labs/clabernetes/apis/v1alpha1.FileFromConfigMap",
-													),
+													Ref:     ref("github.com/srl-labs/clabernetes/apis/v1alpha1.FileFromConfigMap"),
 												},
 											},
 										},
@@ -798,9 +693,7 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_Deployment(
 											Schema: &spec.Schema{
 												SchemaProps: spec.SchemaProps{
 													Default: map[string]interface{}{},
-													Ref: ref(
-														"github.com/srl-labs/clabernetes/apis/v1alpha1.FileFromURL",
-													),
+													Ref:     ref("github.com/srl-labs/clabernetes/apis/v1alpha1.FileFromURL"),
 												},
 											},
 										},
@@ -813,9 +706,7 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_Deployment(
 						SchemaProps: spec.SchemaProps{
 							Description: "Persistence holds configurations relating to persisting each nodes working containerlab directory.",
 							Default:     map[string]interface{}{},
-							Ref: ref(
-								"github.com/srl-labs/clabernetes/apis/v1alpha1.Persistence",
-							),
+							Ref:         ref("github.com/srl-labs/clabernetes/apis/v1alpha1.Persistence"),
 						},
 					},
 					"containerlabDebug": {
@@ -888,9 +779,7 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_Deployment(
 	}
 }
 
-func schema_srl_labs_clabernetes_apis_v1alpha1_Expose(
-	ref common.ReferenceCallback,
-) common.OpenAPIDefinition {
+func schema_srl_labs_clabernetes_apis_v1alpha1_Expose(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -940,9 +829,7 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_Expose(
 	}
 }
 
-func schema_srl_labs_clabernetes_apis_v1alpha1_ExposedPorts(
-	ref common.ReferenceCallback,
-) common.OpenAPIDefinition {
+func schema_srl_labs_clabernetes_apis_v1alpha1_ExposedPorts(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -1004,9 +891,7 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_ExposedPorts(
 	}
 }
 
-func schema_srl_labs_clabernetes_apis_v1alpha1_FileFromConfigMap(
-	ref common.ReferenceCallback,
-) common.OpenAPIDefinition {
+func schema_srl_labs_clabernetes_apis_v1alpha1_FileFromConfigMap(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -1051,9 +936,7 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_FileFromConfigMap(
 	}
 }
 
-func schema_srl_labs_clabernetes_apis_v1alpha1_FileFromURL(
-	ref common.ReferenceCallback,
-) common.OpenAPIDefinition {
+func schema_srl_labs_clabernetes_apis_v1alpha1_FileFromURL(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -1083,9 +966,7 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_FileFromURL(
 	}
 }
 
-func schema_srl_labs_clabernetes_apis_v1alpha1_ImagePull(
-	ref common.ReferenceCallback,
-) common.OpenAPIDefinition {
+func schema_srl_labs_clabernetes_apis_v1alpha1_ImagePull(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -1154,9 +1035,7 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_ImagePull(
 	}
 }
 
-func schema_srl_labs_clabernetes_apis_v1alpha1_ImageRequest(
-	ref common.ReferenceCallback,
-) common.OpenAPIDefinition {
+func schema_srl_labs_clabernetes_apis_v1alpha1_ImageRequest(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -1186,17 +1065,13 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_ImageRequest(
 					"spec": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref: ref(
-								"github.com/srl-labs/clabernetes/apis/v1alpha1.ImageRequestSpec",
-							),
+							Ref:     ref("github.com/srl-labs/clabernetes/apis/v1alpha1.ImageRequestSpec"),
 						},
 					},
 					"status": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref: ref(
-								"github.com/srl-labs/clabernetes/apis/v1alpha1.ImageRequestStatus",
-							),
+							Ref:     ref("github.com/srl-labs/clabernetes/apis/v1alpha1.ImageRequestStatus"),
 						},
 					},
 				},
@@ -1207,9 +1082,7 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_ImageRequest(
 	}
 }
 
-func schema_srl_labs_clabernetes_apis_v1alpha1_ImageRequestList(
-	ref common.ReferenceCallback,
-) common.OpenAPIDefinition {
+func schema_srl_labs_clabernetes_apis_v1alpha1_ImageRequestList(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -1243,9 +1116,7 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_ImageRequestList(
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref: ref(
-											"github.com/srl-labs/clabernetes/apis/v1alpha1.ImageRequest",
-										),
+										Ref:     ref("github.com/srl-labs/clabernetes/apis/v1alpha1.ImageRequest"),
 									},
 								},
 							},
@@ -1260,9 +1131,7 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_ImageRequestList(
 	}
 }
 
-func schema_srl_labs_clabernetes_apis_v1alpha1_ImageRequestSpec(
-	ref common.ReferenceCallback,
-) common.OpenAPIDefinition {
+func schema_srl_labs_clabernetes_apis_v1alpha1_ImageRequestSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -1322,20 +1191,13 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_ImageRequestSpec(
 						},
 					},
 				},
-				Required: []string{
-					"topologyName",
-					"topologyNodeName",
-					"kubernetesNode",
-					"requestedImage",
-				},
+				Required: []string{"topologyName", "topologyNodeName", "kubernetesNode", "requestedImage"},
 			},
 		},
 	}
 }
 
-func schema_srl_labs_clabernetes_apis_v1alpha1_ImageRequestStatus(
-	ref common.ReferenceCallback,
-) common.OpenAPIDefinition {
+func schema_srl_labs_clabernetes_apis_v1alpha1_ImageRequestStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -1365,9 +1227,7 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_ImageRequestStatus(
 	}
 }
 
-func schema_srl_labs_clabernetes_apis_v1alpha1_LinkEndpoint(
-	ref common.ReferenceCallback,
-) common.OpenAPIDefinition {
+func schema_srl_labs_clabernetes_apis_v1alpha1_LinkEndpoint(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -1397,9 +1257,7 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_LinkEndpoint(
 	}
 }
 
-func schema_srl_labs_clabernetes_apis_v1alpha1_Persistence(
-	ref common.ReferenceCallback,
-) common.OpenAPIDefinition {
+func schema_srl_labs_clabernetes_apis_v1alpha1_Persistence(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -1435,13 +1293,11 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_Persistence(
 	}
 }
 
-func schema_srl_labs_clabernetes_apis_v1alpha1_PointToPointTunnel(
-	ref common.ReferenceCallback,
-) common.OpenAPIDefinition {
+func schema_srl_labs_clabernetes_apis_v1alpha1_PointToPointTunnel(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
-				Description: "PointToPointTunnel holds information necessary for creating a tunnel between two interfaces on different nodes of a clabernetes Topology. This connection can be established by using clab tools (vxlan) or the experimental slurpeeth (tcp tunnel magic).",
+				Description: "PointToPointTunnel holds information necessary for creating a tunnel between two interfaces on different nodes of a clabernetes Topology. This connection is established using VXLAN tunnels.",
 				Type:        []string{"object"},
 				Properties: map[string]spec.Schema{
 					"tunnelID": {
@@ -1493,22 +1349,13 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_PointToPointTunnel(
 						},
 					},
 				},
-				Required: []string{
-					"tunnelID",
-					"destination",
-					"localNode",
-					"localInterface",
-					"remoteNode",
-					"remoteInterface",
-				},
+				Required: []string{"tunnelID", "destination", "localNode", "localInterface", "remoteNode", "remoteInterface"},
 			},
 		},
 	}
 }
 
-func schema_srl_labs_clabernetes_apis_v1alpha1_ProbeConfiguration(
-	ref common.ReferenceCallback,
-) common.OpenAPIDefinition {
+func schema_srl_labs_clabernetes_apis_v1alpha1_ProbeConfiguration(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -1526,17 +1373,13 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_ProbeConfiguration(
 					"sshProbeConfiguration": {
 						SchemaProps: spec.SchemaProps{
 							Description: "SSHProbeConfiguration defines an SSH probe.",
-							Ref: ref(
-								"github.com/srl-labs/clabernetes/apis/v1alpha1.SSHProbeConfiguration",
-							),
+							Ref:         ref("github.com/srl-labs/clabernetes/apis/v1alpha1.SSHProbeConfiguration"),
 						},
 					},
 					"tcpProbeConfiguration": {
 						SchemaProps: spec.SchemaProps{
 							Description: "TCPProbeConfiguration defines a TCP probe.",
-							Ref: ref(
-								"github.com/srl-labs/clabernetes/apis/v1alpha1.TCPProbeConfiguration",
-							),
+							Ref:         ref("github.com/srl-labs/clabernetes/apis/v1alpha1.TCPProbeConfiguration"),
 						},
 					},
 				},
@@ -1547,9 +1390,7 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_ProbeConfiguration(
 	}
 }
 
-func schema_srl_labs_clabernetes_apis_v1alpha1_ReconcileHashes(
-	ref common.ReferenceCallback,
-) common.OpenAPIDefinition {
+func schema_srl_labs_clabernetes_apis_v1alpha1_ReconcileHashes(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -1603,9 +1444,7 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_ReconcileHashes(
 	}
 }
 
-func schema_srl_labs_clabernetes_apis_v1alpha1_SSHProbeConfiguration(
-	ref common.ReferenceCallback,
-) common.OpenAPIDefinition {
+func schema_srl_labs_clabernetes_apis_v1alpha1_SSHProbeConfiguration(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -1643,9 +1482,7 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_SSHProbeConfiguration(
 	}
 }
 
-func schema_srl_labs_clabernetes_apis_v1alpha1_Scheduling(
-	ref common.ReferenceCallback,
-) common.OpenAPIDefinition {
+func schema_srl_labs_clabernetes_apis_v1alpha1_Scheduling(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -1695,9 +1532,7 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_Scheduling(
 	}
 }
 
-func schema_srl_labs_clabernetes_apis_v1alpha1_StatusProbes(
-	ref common.ReferenceCallback,
-) common.OpenAPIDefinition {
+func schema_srl_labs_clabernetes_apis_v1alpha1_StatusProbes(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -1741,9 +1576,7 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_StatusProbes(
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref: ref(
-											"github.com/srl-labs/clabernetes/apis/v1alpha1.ProbeConfiguration",
-										),
+										Ref:     ref("github.com/srl-labs/clabernetes/apis/v1alpha1.ProbeConfiguration"),
 									},
 								},
 							},
@@ -1753,9 +1586,7 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_StatusProbes(
 						SchemaProps: spec.SchemaProps{
 							Description: "ProbeConfiguration is the default probe configuration for the Topology.",
 							Default:     map[string]interface{}{},
-							Ref: ref(
-								"github.com/srl-labs/clabernetes/apis/v1alpha1.ProbeConfiguration",
-							),
+							Ref:         ref("github.com/srl-labs/clabernetes/apis/v1alpha1.ProbeConfiguration"),
 						},
 					},
 				},
@@ -1766,9 +1597,7 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_StatusProbes(
 	}
 }
 
-func schema_srl_labs_clabernetes_apis_v1alpha1_TCPProbeConfiguration(
-	ref common.ReferenceCallback,
-) common.OpenAPIDefinition {
+func schema_srl_labs_clabernetes_apis_v1alpha1_TCPProbeConfiguration(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -1790,9 +1619,7 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_TCPProbeConfiguration(
 	}
 }
 
-func schema_srl_labs_clabernetes_apis_v1alpha1_Topology(
-	ref common.ReferenceCallback,
-) common.OpenAPIDefinition {
+func schema_srl_labs_clabernetes_apis_v1alpha1_Topology(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -1822,17 +1649,13 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_Topology(
 					"spec": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref: ref(
-								"github.com/srl-labs/clabernetes/apis/v1alpha1.TopologySpec",
-							),
+							Ref:     ref("github.com/srl-labs/clabernetes/apis/v1alpha1.TopologySpec"),
 						},
 					},
 					"status": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref: ref(
-								"github.com/srl-labs/clabernetes/apis/v1alpha1.TopologyStatus",
-							),
+							Ref:     ref("github.com/srl-labs/clabernetes/apis/v1alpha1.TopologyStatus"),
 						},
 					},
 				},
@@ -1843,9 +1666,7 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_Topology(
 	}
 }
 
-func schema_srl_labs_clabernetes_apis_v1alpha1_TopologyList(
-	ref common.ReferenceCallback,
-) common.OpenAPIDefinition {
+func schema_srl_labs_clabernetes_apis_v1alpha1_TopologyList(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -1879,9 +1700,7 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_TopologyList(
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref: ref(
-											"github.com/srl-labs/clabernetes/apis/v1alpha1.Topology",
-										),
+										Ref:     ref("github.com/srl-labs/clabernetes/apis/v1alpha1.Topology"),
 									},
 								},
 							},
@@ -1896,9 +1715,7 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_TopologyList(
 	}
 }
 
-func schema_srl_labs_clabernetes_apis_v1alpha1_TopologySpec(
-	ref common.ReferenceCallback,
-) common.OpenAPIDefinition {
+func schema_srl_labs_clabernetes_apis_v1alpha1_TopologySpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -1909,45 +1726,35 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_TopologySpec(
 						SchemaProps: spec.SchemaProps{
 							Description: "Definition defines the actual set of nodes (network ones, not k8s ones!) that this Topology CR represents. Historically, and probably most often, this means Topology holds a \"normal\" containerlab topology file that will be \"clabernetsified\", however this could also be a \"kne\" config, or perhaps others in the future.",
 							Default:     map[string]interface{}{},
-							Ref: ref(
-								"github.com/srl-labs/clabernetes/apis/v1alpha1.Definition",
-							),
+							Ref:         ref("github.com/srl-labs/clabernetes/apis/v1alpha1.Definition"),
 						},
 					},
 					"expose": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Expose holds configurations relevant to how clabernetes exposes a topology.",
 							Default:     map[string]interface{}{},
-							Ref: ref(
-								"github.com/srl-labs/clabernetes/apis/v1alpha1.Expose",
-							),
+							Ref:         ref("github.com/srl-labs/clabernetes/apis/v1alpha1.Expose"),
 						},
 					},
 					"deployment": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Deployment holds configurations relevant to how clabernetes configures deployments that make up a given topology.",
 							Default:     map[string]interface{}{},
-							Ref: ref(
-								"github.com/srl-labs/clabernetes/apis/v1alpha1.Deployment",
-							),
+							Ref:         ref("github.com/srl-labs/clabernetes/apis/v1alpha1.Deployment"),
 						},
 					},
 					"statusProbes": {
 						SchemaProps: spec.SchemaProps{
 							Description: "StatusProbes holds the configurations relevant to how clabernetes and the launcher handle checking and reporting the containerlab node status",
 							Default:     map[string]interface{}{},
-							Ref: ref(
-								"github.com/srl-labs/clabernetes/apis/v1alpha1.StatusProbes",
-							),
+							Ref:         ref("github.com/srl-labs/clabernetes/apis/v1alpha1.StatusProbes"),
 						},
 					},
 					"imagePull": {
 						SchemaProps: spec.SchemaProps{
 							Description: "ImagePull holds configurations relevant to how clabernetes launcher pods handle pulling images.",
 							Default:     map[string]interface{}{},
-							Ref: ref(
-								"github.com/srl-labs/clabernetes/apis/v1alpha1.ImagePull",
-							),
+							Ref:         ref("github.com/srl-labs/clabernetes/apis/v1alpha1.ImagePull"),
 						},
 					},
 					"naming": {
@@ -1960,7 +1767,7 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_TopologySpec(
 					},
 					"connectivity": {
 						SchemaProps: spec.SchemaProps{
-							Description: "Connectivity defines the type of connectivity to use between nodes in the topology. The default behavior is to use vxlan tunnels, alternatively you can enable a more experimental \"slurpeeth\" connectivity flavor that stuffs traffic into tcp tunnels to avoid any vxlan mtu and/or fragmentation challenges.",
+							Description: "Connectivity defines the type of connectivity to use between nodes in the topology. The default behavior is to use vxlan tunnels.",
 							Type:        []string{"string"},
 							Format:      "",
 						},
@@ -1974,9 +1781,7 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_TopologySpec(
 	}
 }
 
-func schema_srl_labs_clabernetes_apis_v1alpha1_TopologyStatus(
-	ref common.ReferenceCallback,
-) common.OpenAPIDefinition {
+func schema_srl_labs_clabernetes_apis_v1alpha1_TopologyStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -2002,9 +1807,7 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_TopologyStatus(
 						SchemaProps: spec.SchemaProps{
 							Description: "ReconcileHashes holds the hashes form the last reconciliation run.",
 							Default:     map[string]interface{}{},
-							Ref: ref(
-								"github.com/srl-labs/clabernetes/apis/v1alpha1.ReconcileHashes",
-							),
+							Ref:         ref("github.com/srl-labs/clabernetes/apis/v1alpha1.ReconcileHashes"),
 						},
 					},
 					"configs": {
@@ -2031,9 +1834,7 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_TopologyStatus(
 								Allows: true,
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
-										Ref: ref(
-											"github.com/srl-labs/clabernetes/apis/v1alpha1.ExposedPorts",
-										),
+										Ref: ref("github.com/srl-labs/clabernetes/apis/v1alpha1.ExposedPorts"),
 									},
 								},
 							},
@@ -2076,25 +1877,14 @@ func schema_srl_labs_clabernetes_apis_v1alpha1_TopologyStatus(
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref: ref(
-											"k8s.io/apimachinery/pkg/apis/meta/v1.Condition",
-										),
+										Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.Condition"),
 									},
 								},
 							},
 						},
 					},
 				},
-				Required: []string{
-					"kind",
-					"removeTopologyPrefix",
-					"reconcileHashes",
-					"configs",
-					"exposedPorts",
-					"nodeReadiness",
-					"topologyReady",
-					"conditions",
-				},
+				Required: []string{"kind", "removeTopologyPrefix", "reconcileHashes", "configs", "exposedPorts", "nodeReadiness", "topologyReady", "conditions"},
 			},
 		},
 		Dependencies: []string{

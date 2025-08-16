@@ -31,17 +31,6 @@ func TestGetTopologyKind(t *testing.T) {
 			},
 			expected: clabernetesapis.TopologyKindContainerlab,
 		},
-		{
-			name: "kne",
-			in: &clabernetesapisv1alpha1.Topology{
-				Spec: clabernetesapisv1alpha1.TopologySpec{
-					Definition: clabernetesapisv1alpha1.Definition{
-						Kne: "something",
-					},
-				},
-			},
-			expected: clabernetesapis.TopologyKindKne,
-		},
 	}
 
 	for _, testCase := range cases {

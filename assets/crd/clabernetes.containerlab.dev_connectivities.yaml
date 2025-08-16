@@ -47,7 +47,7 @@ spec:
                     description: |-
                       PointToPointTunnel holds information necessary for creating a tunnel between two interfaces on
                       different nodes of a clabernetes Topology. This connection can be established by using clab tools
-                      (vxlan) or the experimental slurpeeth (tcp tunnel magic).
+                      using VXLAN tunnels.
                     properties:
                       destination:
                         description: Destination is the destination service to connect

@@ -17,7 +17,6 @@ fmt: ## Run formatters
 lint: fmt ## Run linters
 	golangci-lint run
 	helm lint --quiet charts/clabernetes
-	helm lint --quiet charts/clicker
 
 test: ## Run unit tests
 	gotestsum --format testname --hide-summary=skipped -- -coverprofile=cover.out `go list ./... | grep -v e2e`
@@ -57,8 +56,7 @@ run-openapi-gen: ## Run openapi-gen
 	--output-file openapi_generated.go \
 	--output-pkg github.com/srl-labs/clabernetes/generated/openapi \
 	github.com/srl-labs/clabernetes/apis/...
-	venv/bin/python build/crds-to-openapi/crds-to-openapi.py && \
-	cp generated/openapi/openapi.json ui/clabernetes-openapi.json
+	venv/bin/python build/crds-to-openapi/crds-to-openapi.py
 
 run-client-gen: ## Run client-gen
 	client-gen \

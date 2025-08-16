@@ -26,9 +26,8 @@ type Topology struct {
 // +kubebuilder:validation:XValidation:rule="!has(oldSelf.naming) || has(self.naming)", message="naming is required once set"
 type TopologySpec struct {
 	// Definition defines the actual set of nodes (network ones, not k8s ones!) that this Topology
-	// CR represents. Historically, and probably most often, this means Topology holds a "normal"
-	// containerlab topology file that will be "clabernetsified", however this could also be a "kne"
-	// config, or perhaps others in the future.
+	// CR represents. This means Topology holds a "normal" containerlab topology file that will be
+	// "clabernetsified".
 	Definition Definition `json:"definition"`
 	// Expose holds configurations relevant to how clabernetes exposes a topology.
 	// +optional
@@ -62,18 +61,16 @@ type TopologySpec struct {
 	// +kubebuilder:default=global
 	Naming string `json:"naming"`
 	// Connectivity defines the type of connectivity to use between nodes in the topology. The
-	// default behavior is to use vxlan tunnels, alternatively you can enable a more experimental
-	// "slurpeeth" connectivity flavor that stuffs traffic into tcp tunnels to avoid any vxlan mtu
-	// and/or fragmentation challenges.
-	// +kubebuilder:validation:Enum=vxlan;slurpeeth
+	// default behavior is to use vxlan tunnels.
+	// +kubebuilder:validation:Enum=vxlan
 	// +kubebuilder:default=vxlan
 	Connectivity string `json:"connectivity,omitempty"`
 }
 
 // TopologyStatus is the status for a Topology resource.
 type TopologyStatus struct {
-	// Kind is the topology kind this CR represents -- for example "containerlab".
-	// +kubebuilder:validation:Enum=containerlab;kne
+	// Kind is the topology kind this CR represents -- this will always be "containerlab".
+	// +kubebuilder:validation:Enum=containerlab
 	Kind string `json:"kind"`
 	// RemoveTopologyPrefix holds the "resolved" value of the RemoveTopologyPrefix field -- that is
 	// if it is unset (nil) when a Topology is created, the controller will use the default global

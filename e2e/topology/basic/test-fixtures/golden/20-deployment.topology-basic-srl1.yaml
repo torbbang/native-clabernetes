@@ -86,8 +86,6 @@ spec:
             - containerPort: 14789
               name: vxlan
               protocol: UDP
-            - containerPort: 4799
-              name: slurpeeth
               protocol: TCP
           resources:
             requests:

@@ -25,8 +25,7 @@ func NewDefinitionProcessor(
 	reconcileData *ReconcileData,
 	configManagerGetter clabernetesconfig.ManagerGetterFunc,
 ) (DefinitionProcessor, error) {
-	switch {
-	case topology.Spec.Definition.Containerlab != "":
+	if topology.Spec.Definition.Containerlab != "" {
 		reconcileData.Kind = clabernetesapis.TopologyKindContainerlab
 
 		return &containerlabDefinitionProcessor{
@@ -37,23 +36,12 @@ func NewDefinitionProcessor(
 				configManagerGetter: configManagerGetter,
 			},
 		}, nil
-	case topology.Spec.Definition.Kne != "":
-		reconcileData.Kind = clabernetesapis.TopologyKindKne
-
-		return &kneDefinitionProcessor{
-			&definitionProcessor{
-				logger:              logger,
-				topology:            topology,
-				reconcileData:       reconcileData,
-				configManagerGetter: configManagerGetter,
-			},
-		}, nil
-	default:
-		return nil, fmt.Errorf(
-			"%w: unknown or unsupported topology definition kind, this is *probably* a bug",
-			claberneteserrors.ErrReconcile,
-		)
 	}
+
+	return nil, fmt.Errorf(
+		"%w: no containerlab definition provided",
+		claberneteserrors.ErrReconcile,
+	)
 }
 
 type definitionProcessor struct {

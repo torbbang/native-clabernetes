@@ -679,11 +679,6 @@ func (r *DeploymentReconciler) renderDeploymentContainer(
 				ContainerPort: clabernetesconstants.VXLANServicePort,
 				Protocol:      clabernetesconstants.UDP,
 			},
-			{
-				Name:          clabernetesconstants.ConnectivitySlurpeeth,
-				ContainerPort: clabernetesconstants.SlurpeethServicePort,
-				Protocol:      clabernetesconstants.TCP,
-			},
 		},
 		VolumeMounts: []k8scorev1.VolumeMount{
 			{

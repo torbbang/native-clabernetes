@@ -36,10 +36,6 @@ func NewManager(
 		return &vxlanManager{
 			common: c,
 		}, nil
-	case clabernetesconstants.ConnectivitySlurpeeth:
-		return &slurpeethManager{
-			common: c,
-		}, nil
 	default:
 		return nil, fmt.Errorf(
 			"%w: unknown connectivity kind, cannot create connectivity manager",

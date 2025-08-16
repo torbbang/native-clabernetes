@@ -58,14 +58,11 @@ type Persistence struct {
 type InsecureRegistries []string
 
 // Definition holds the underlying topology definition for the Topology CR. A Topology *must* have
-// one -- and only one -- definition type defined.
+// a containerlab definition.
 type Definition struct {
 	// Containerlab holds a valid containerlab topology.
 	// +optional
 	Containerlab string `json:"containerlab,omitempty"`
-	// Kne holds a valid kne topology.
-	// +optional
-	Kne string `json:"kne,omitempty"`
 }
 
 // Expose holds configurations relevant to how clabernetes exposes a topology.

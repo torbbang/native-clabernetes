@@ -1,13 +1,9 @@
-[![Discord](https://img.shields.io/discord/860500297297821756?style=flat-square&label=discord&logo=discord&color=00c9ff&labelColor=bec8d2)](https://discord.gg/vAyddtaEV9)
-[![Go Report](https://img.shields.io/badge/go%20report-A%2B-blue?style=flat-square&color=00c9ff&labelColor=bec8d2)](https://goreportcard.com/report/github.com/srl-labs/clabernetes)
+# native-clabernetes (nc9s)
 
-# clabernetes a.k.a c9s
+A clabernetes fork aiming to implement more functionality with Kubernetes native constructs.
 
-<p>
-  <img src="https://gitlab.com/rdodin/pics/-/wikis/uploads/b5d611838fcb9c588b6311bccf11b954/c9s_logo1-upscale2x-white-tag+font-min__1_.png" width="200" align="left" alt="clabernetes"/>
-  Love containerlab? Want containerlab, just distributed in a kubernetes cluster? Enter
-  clabernetes -- containerlab + kubernetes. clabernetes is a kubernetes controller that deploys valid
-  containerlab topologies into a kubernetes cluster.
+  > ⚠️ **PROTOTYPE WARNING**: This is a mostly vibe-coded prototype in it's current state. Not recommended for production use. Use at your own risk!
 
-  See [clabernetes docs](https://containerlab.dev/manual/clabernetes) for reference.
-</p>
+## Acknowledgments
+
+Based on [clabernetes](https://github.com/srl-labs/clabernetes) by SRL Labs.

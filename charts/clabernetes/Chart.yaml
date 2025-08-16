@@ -15,8 +15,3 @@ maintainers:
 icon: https://gitlab.com/rdodin/pics/-/wikis/uploads/259ce936020a95eb9e78c6f353633587/c9s_logo1-upscale2x-white-tag+font-min.png
 type: application
 version: 0.0.0
-dependencies:
-  # being a local (symlinked) dep, no need for version or repo or anything
-  - name: clicker
-    version: 0.0.0
-    condition: clicker.enabled

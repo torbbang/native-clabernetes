@@ -195,14 +195,6 @@ func (r *ServiceFabricReconciler) renderServiceBase(
 						IntVal: clabernetesconstants.VXLANServicePort,
 					},
 				},
-				{
-					Name:     "slurpeeth",
-					Protocol: clabernetesconstants.TCP,
-					Port:     clabernetesconstants.SlurpeethServicePort,
-					TargetPort: intstr.IntOrString{
-						IntVal: clabernetesconstants.SlurpeethServicePort,
-					},
-				},
 			},
 			Selector: selectorLabels,
 			Type:     k8scorev1.ServiceTypeClusterIP,
